@@ -91,6 +91,11 @@ export function createScroller() {
   }
 
   return {
+    scrollBy(amount: number): void {
+      stopAllHolds()
+      const base = animating ? target : window.scrollY
+      startToward(base + amount)
+    },
     startHold(direction: number, step: number): void {
       stopAllHolds()
       const base = animating ? target : window.scrollY

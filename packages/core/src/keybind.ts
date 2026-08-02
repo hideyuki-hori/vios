@@ -3,6 +3,8 @@ import { type Key, key } from './key'
 export type Action =
   | 'scrollDown'
   | 'scrollUp'
+  | 'scrollPageDown'
+  | 'scrollPageUp'
   | 'scrollToTop'
   | 'scrollToBottom'
   | 'historyBack'
@@ -21,6 +23,8 @@ export type Keybind = {
 export const defaultKeybinds: Keybind[] = [
   { sequence: [key('j')], action: 'scrollDown' },
   { sequence: [key('k')], action: 'scrollUp' },
+  { sequence: [key('d')], action: 'scrollPageDown' },
+  { sequence: [key('u')], action: 'scrollPageUp' },
   { sequence: [key('h')], action: 'historyBack' },
   { sequence: [key('l')], action: 'historyForward' },
   { sequence: [key('g'), key('g')], action: 'scrollToTop' },

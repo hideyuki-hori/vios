@@ -6,8 +6,13 @@ import { createScroller } from './scroller'
 import { openTabSwitcher } from './tab-switcher-ui'
 
 const scrollStep = 64
+const pageOverlapPx = 48
 
 const scroller = createScroller()
+
+function pageStep(): number {
+  return Math.max(window.innerHeight - pageOverlapPx, scrollStep)
+}
 
 const performers: Record<Action, (repeat: boolean) => void> = {
   scrollDown(repeat) {
@@ -15,6 +20,12 @@ const performers: Record<Action, (repeat: boolean) => void> = {
   },
   scrollUp(repeat) {
     if (!repeat) scroller.startHold(-1, scrollStep)
+  },
+  scrollPageDown() {
+    scroller.scrollBy(pageStep())
+  },
+  scrollPageUp() {
+    scroller.scrollBy(-pageStep())
   },
   scrollToTop() {
     scroller.scrollTo(0)
