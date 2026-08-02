@@ -9,9 +9,13 @@ const scrollStep = 64
 
 const scroller = createScroller()
 
-const performers: Record<Action, () => void> = {
-  scrollDown: () => scroller.scrollBy(scrollStep),
-  scrollUp: () => scroller.scrollBy(-scrollStep),
+const performers: Record<Action, (repeat: boolean) => void> = {
+  scrollDown: (repeat) => {
+    if (!repeat) scroller.startHold(1, scrollStep)
+  },
+  scrollUp: (repeat) => {
+    if (!repeat) scroller.startHold(-1, scrollStep)
+  },
   scrollToTop: () => scroller.scrollTo(0),
   scrollToBottom: () => scroller.scrollTo(Number.POSITIVE_INFINITY),
   historyBack: () => history.back(),
@@ -33,6 +37,11 @@ const performers: Record<Action, () => void> = {
   },
 }
 
-export const performAction = (action: Action): void => {
-  performers[action]()
+export const performAction = (action: Action, repeat: boolean): void => {
+  performers[action](repeat)
+}
+
+export const releaseAction = (action: Action): void => {
+  if (action === 'scrollDown') scroller.stopHold(1)
+  if (action === 'scrollUp') scroller.stopHold(-1)
 }

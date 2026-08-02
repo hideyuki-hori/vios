@@ -1,5 +1,5 @@
 import { createKeybindMatcher, defaultKeybinds } from '@vios/core'
-import { performAction } from './actions'
+import { performAction, releaseAction } from './actions'
 import { handleBookmarkKeydown, isBookmarkPaletteOpen } from './bookmark-ui'
 import { handleHintKeydown, isHintModeActive } from './hint-ui'
 import { shouldIgnore, toKey } from './keyboard'
@@ -49,7 +49,24 @@ window.addEventListener(
       }, sequenceTimeoutMs)
       return
     }
-    performAction(result.action)
+    performAction(result.action, event.repeat)
+  },
+  true,
+)
+
+window.addEventListener(
+  'keyup',
+  (event) => {
+    for (const keybind of defaultKeybinds) {
+      const first = keybind.sequence[0]
+      if (
+        keybind.sequence.length === 1 &&
+        first !== undefined &&
+        first.key.toLowerCase() === event.key.toLowerCase()
+      ) {
+        releaseAction(keybind.action)
+      }
+    }
   },
   true,
 )
