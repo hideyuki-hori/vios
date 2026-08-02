@@ -1,6 +1,7 @@
 import { createKeybindMatcher, defaultKeybinds } from '@vios/core'
 import { performAction } from './actions'
 import { shouldIgnore, toKey } from './keyboard'
+import { handleTabSwitcherKeydown, isTabSwitcherOpen } from './tab-switcher-ui'
 
 const sequenceTimeoutMs = 1000
 
@@ -17,6 +18,10 @@ const clearPendingTimer = () => {
 window.addEventListener(
   'keydown',
   (event) => {
+    if (isTabSwitcherOpen()) {
+      handleTabSwitcherKeydown(event)
+      return
+    }
     if (shouldIgnore(event)) return
     clearPendingTimer()
     if (event.key === 'Escape') {
