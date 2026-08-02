@@ -10,6 +10,7 @@ export type Action =
   | 'openTabSwitcher'
   | 'closeCurrentTab'
   | 'reloadPage'
+  | 'enterHintMode'
 
 export type Keybind = {
   sequence: Key[]
@@ -26,4 +27,5 @@ export const defaultKeybinds: Keybind[] = [
   { sequence: [key('t')], action: 'openTabSwitcher' },
   { sequence: [key('x')], action: 'closeCurrentTab' },
   { sequence: [key('r')], action: 'reloadPage' },
+  { sequence: [key('f')], action: 'enterHintMode' },
 ]

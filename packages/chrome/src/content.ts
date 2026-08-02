@@ -1,5 +1,6 @@
 import { createKeybindMatcher, defaultKeybinds } from '@vios/core'
 import { performAction } from './actions'
+import { handleHintKeydown, isHintModeActive } from './hint-ui'
 import { shouldIgnore, toKey } from './keyboard'
 import { handleTabSwitcherKeydown, isTabSwitcherOpen } from './tab-switcher-ui'
 
@@ -20,6 +21,10 @@ window.addEventListener(
   (event) => {
     if (isTabSwitcherOpen()) {
       handleTabSwitcherKeydown(event)
+      return
+    }
+    if (isHintModeActive()) {
+      handleHintKeydown(event)
       return
     }
     if (shouldIgnore(event)) return

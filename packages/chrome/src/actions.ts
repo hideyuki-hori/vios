@@ -1,5 +1,6 @@
 import type { Action } from '@vios/core'
 import { requestCloseCurrentTab } from '@vios/platform'
+import { openHints } from './hint-ui'
 import { createScroller } from './scroller'
 import { openTabSwitcher } from './tab-switcher-ui'
 
@@ -22,6 +23,9 @@ const performers: Record<Action, () => void> = {
   },
   reloadPage: () => {
     location.reload()
+  },
+  enterHintMode: () => {
+    openHints()
   },
 }
 

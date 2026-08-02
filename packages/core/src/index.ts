@@ -1,4 +1,10 @@
 export { filterByQuery } from './filter'
+export {
+  createHintSession,
+  generateHintLabels,
+  type HintEvent,
+  type HintSession,
+} from './hint'
 export { type Key, key, keysEqual } from './key'
 export { type Action, defaultKeybinds, type Keybind } from './keybind'
 export {
