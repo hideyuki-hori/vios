@@ -3,7 +3,13 @@
   "name": "vios",
   "version": "0.1.0",
   "description": "Vim-like keyboard navigation and utilities",
-  "permissions": ["tabs", "bookmarks"],
+  "permissions": ["tabs", "bookmarks", "storage", "alarms", "declarativeNetRequest"],
+  "host_permissions": ["<all_urls>"],
+  "action": {},
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
   "background": {
     "service_worker": "background.js"
   },
@@ -11,6 +17,12 @@
     {
       "matches": ["<all_urls>"],
       "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["blocked.html"],
+      "matches": ["<all_urls>"]
     }
   ]
 }

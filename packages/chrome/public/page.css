@@ -1,0 +1,143 @@
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #16181d;
+  color: #e8e8ea;
+  font:
+    14px / 1.6 system-ui,
+    sans-serif;
+}
+
+.card {
+  width: min(560px, calc(100vw - 48px));
+  background: #1e2026;
+  border: 1px solid #383b44;
+  border-radius: 12px;
+  padding: 28px 32px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+}
+
+h1 {
+  font-size: 20px;
+  margin: 0 0 8px;
+}
+
+h2 {
+  font-size: 15px;
+  margin: 0 0 4px;
+}
+
+.hint {
+  color: #8b909a;
+  font-size: 13px;
+}
+
+code {
+  background: #16181d;
+  border: 1px solid #383b44;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  background: #16181d;
+  color: #e8e8ea;
+  border: 1px solid #383b44;
+  border-radius: 6px;
+  font: inherit;
+  outline: none;
+}
+
+input:focus {
+  border-color: #4f78d1;
+}
+
+button {
+  padding: 8px 14px;
+  background: #2b3c5e;
+  color: #e8e8ea;
+  border: 1px solid #383b44;
+  border-radius: 6px;
+  font: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+button:hover {
+  background: #35496f;
+}
+
+button.danger {
+  background: #5e2b2b;
+}
+
+button.danger:hover {
+  background: #6f3535;
+}
+
+.error {
+  color: #e0645f;
+  min-height: 1.5em;
+  font-size: 13px;
+}
+
+.add-row {
+  display: flex;
+  gap: 8px;
+}
+
+.domain-list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.domain-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 4px;
+  border-top: 1px solid #2a2d35;
+}
+
+.domain-list li.empty {
+  color: #8b909a;
+  justify-content: flex-start;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: grid;
+  place-items: center;
+}
+
+.modal {
+  width: min(480px, calc(100vw - 48px));
+  background: #1e2026;
+  border: 1px solid #383b44;
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+}
+
+.modal ul {
+  max-height: 200px;
+  overflow-y: auto;
+  color: #8b909a;
+  font-size: 13px;
+  padding-left: 20px;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}

@@ -1,3 +1,4 @@
+import { watch as watchDir } from 'node:fs'
 import { cp } from 'node:fs/promises'
 import { createServer } from 'node:http'
 import { build, context } from 'esbuild'
@@ -6,7 +7,7 @@ const watch = process.argv.includes('--watch')
 const devServerPort = 35729
 
 const options = {
-  entryPoints: ['src/content.ts', 'src/background.ts'],
+  entryPoints: ['src/content.ts', 'src/background.ts', 'src/options.ts', 'src/blocked.ts'],
   bundle: true,
   format: 'iife',
   outdir: 'dist',
@@ -58,6 +59,13 @@ if (watch) {
       })
     },
   }
+
+  watchDir('public', { recursive: true }, () => {
+    void cp('public', 'dist', { recursive: true }).then(() => {
+      version += 1
+      pendingTabReload = true
+    })
+  })
 
   const ctx = await context({ ...options, plugins: [notifyPlugin] })
   await ctx.watch()

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>vios 設定</title>
+<link rel="stylesheet" href="page.css">
+</head>
+<body>
+<main class="card">
+<h1>vios</h1>
+<section>
+<h2>ブロックするサイト</h2>
+<p class="hint">ドメイン単位でブロックします(サブドメインを含む)。追加時に該当ドメインの開いているタブは閉じられます</p>
+<div class="add-row">
+<input id="input" type="text" placeholder="youtube.com" autocomplete="off" aria-label="ブロックするドメイン">
+<button id="add" type="button">追加</button>
+</div>
+<p id="error" class="error"></p>
+<ul id="list" class="domain-list"></ul>
+</section>
+</main>
+<script src="options.js"></script>
+</body>
+</html>

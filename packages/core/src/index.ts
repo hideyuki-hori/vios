@@ -1,3 +1,11 @@
+export {
+  activeBlockedDomains,
+  type BlockState,
+  isUnlockCommand,
+  isUnlocked,
+  matchesDomain,
+  normalizeDomain,
+} from './block'
 export type { BookmarkSummary } from './bookmark'
 export {
   type BookmarkNavigator,

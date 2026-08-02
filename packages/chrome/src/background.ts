@@ -1,4 +1,5 @@
 import { extensionName } from '@vios/core'
+import { handleReblock, reblockAlarmPrefix, syncBlockRules } from './blocking'
 import { listBookmarks } from './bookmarks'
 import { startDevReload } from './dev-reload'
 import type { BackgroundRequest } from './messages'
@@ -36,6 +37,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   void handleRequest(request, sender).then(sendResponse)
   return true
 })
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name.startsWith(reblockAlarmPrefix)) {
+    void handleReblock(alarm.name.slice(reblockAlarmPrefix.length))
+  }
+})
+
+chrome.action.onClicked.addListener(() => {
+  void chrome.runtime.openOptionsPage()
+})
+
+void syncBlockRules()
 
 if (__DEV__) {
   void startDevReload()
