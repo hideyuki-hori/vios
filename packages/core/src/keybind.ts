@@ -9,6 +9,7 @@ export type Action =
   | 'historyForward'
   | 'openTabSwitcher'
   | 'closeCurrentTab'
+  | 'reloadPage'
 
 export type Keybind = {
   sequence: Key[]
@@ -24,4 +25,5 @@ export const defaultKeybinds: Keybind[] = [
   { sequence: [key('G')], action: 'scrollToBottom' },
   { sequence: [key('t')], action: 'openTabSwitcher' },
   { sequence: [key('x')], action: 'closeCurrentTab' },
+  { sequence: [key('r')], action: 'reloadPage' },
 ]

@@ -20,6 +20,9 @@ const performers: Record<Action, () => void> = {
   closeCurrentTab: () => {
     void requestCloseCurrentTab()
   },
+  reloadPage: () => {
+    location.reload()
+  },
 }
 
 export const performAction = (action: Action): void => {
