@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "pnpm --filter @vios/extension build",
-    "dev": "pnpm --filter @vios/extension dev",
+    "build": "pnpm --filter @vios/chrome build",
+    "dev": "pnpm --filter @vios/chrome dev",
     "typecheck": "pnpm -r exec tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "format": "biome format --write .",
