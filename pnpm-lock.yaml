@@ -18,7 +18,11 @@ importers:
         specifier: ^4.1.10
         version: 4.1.10(vite@8.2.0(esbuild@0.28.1))
 
-  packages/core: {}
+  packages/core:
+    devDependencies:
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(vite@8.2.0(esbuild@0.28.1))
 
   packages/extension:
     dependencies:
