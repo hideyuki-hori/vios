@@ -1,4 +1,4 @@
-export const filterByQuery = <T>(items: T[], query: string, text: (item: T) => string): T[] => {
+export function filterByQuery<T>(items: T[], query: string, text: (item: T) => string): T[] {
   const terms = query
     .trim()
     .toLowerCase()

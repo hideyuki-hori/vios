@@ -18,7 +18,6 @@ export {
   type KeybindMatcher,
   type MatchResult,
 } from './keybind-matcher'
-export type { BackgroundRequest } from './messages'
 export type { TabSummary } from './tab'
 export {
   createTabSwitcher,

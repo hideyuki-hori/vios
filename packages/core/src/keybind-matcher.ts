@@ -8,24 +8,30 @@ export type KeybindMatcher = {
   reset: () => void
 }
 
-const sequenceEquals = (a: Key[], b: Key[]): boolean =>
-  a.length === b.length &&
-  a.every((k, i) => {
-    const other = b[i]
-    return other !== undefined && keysEqual(k, other)
-  })
+function sequenceEquals(a: Key[], b: Key[]): boolean {
+  return (
+    a.length === b.length &&
+    a.every((k, i) => {
+      const other = b[i]
+      return other !== undefined && keysEqual(k, other)
+    })
+  )
+}
 
-const isProperPrefix = (candidate: Key[], sequence: Key[]): boolean =>
-  candidate.length < sequence.length &&
-  candidate.every((k, i) => {
-    const other = sequence[i]
-    return other !== undefined && keysEqual(k, other)
-  })
+function isProperPrefix(candidate: Key[], sequence: Key[]): boolean {
+  return (
+    candidate.length < sequence.length &&
+    candidate.every((k, i) => {
+      const other = sequence[i]
+      return other !== undefined && keysEqual(k, other)
+    })
+  )
+}
 
-export const createKeybindMatcher = (keybinds: Keybind[]): KeybindMatcher => {
+export function createKeybindMatcher(keybinds: Keybind[]): KeybindMatcher {
   let buffer: Key[] = []
 
-  const feed = (input: Key): MatchResult => {
+  function feed(input: Key): MatchResult {
     const candidate = [...buffer, input]
     const matched = keybinds.find((keybind) => sequenceEquals(keybind.sequence, candidate))
     if (matched) {
@@ -43,7 +49,7 @@ export const createKeybindMatcher = (keybinds: Keybind[]): KeybindMatcher => {
     return { type: 'none' }
   }
 
-  const reset = () => {
+  function reset(): void {
     buffer = []
   }
 

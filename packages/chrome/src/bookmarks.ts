@@ -1,9 +1,9 @@
 import type { BookmarkSummary } from '@vios/core'
 
-export const listBookmarks = async (): Promise<BookmarkSummary[]> => {
+export async function listBookmarks(): Promise<BookmarkSummary[]> {
   const roots = await chrome.bookmarks.getTree()
   const result: BookmarkSummary[] = []
-  const walk = (node: chrome.bookmarks.BookmarkTreeNode, path: string): void => {
+  function walk(node: chrome.bookmarks.BookmarkTreeNode, path: string): void {
     if (node.url !== undefined) {
       result.push({ id: node.id, title: node.title, url: node.url, path })
       return

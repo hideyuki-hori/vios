@@ -10,7 +10,7 @@ const sequenceTimeoutMs = 1000
 const matcher = createKeybindMatcher(defaultKeybinds)
 let pendingTimer: number | undefined
 
-const clearPendingTimer = () => {
+function clearPendingTimer(): void {
   if (pendingTimer !== undefined) {
     window.clearTimeout(pendingTimer)
     pendingTimer = undefined

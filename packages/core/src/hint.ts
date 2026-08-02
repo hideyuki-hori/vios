@@ -2,7 +2,7 @@ import type { Key } from './key'
 
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
-export const generateHintLabels = (count: number): string[] => {
+export function generateHintLabels(count: number): string[] {
   if (count <= 0) return []
   let length = 1
   while (alphabet.length ** length < count) length += 1
@@ -29,13 +29,14 @@ export type HintSession = {
   feed: (input: Key) => HintEvent
 }
 
-export const createHintSession = (labels: string[]): HintSession => {
+export function createHintSession(labels: string[]): HintSession {
   let prefix = ''
 
-  const candidatesFor = (current: string): number[] =>
-    labels.flatMap((label, index) => (label.startsWith(current) ? [index] : []))
+  function candidatesFor(current: string): number[] {
+    return labels.flatMap((label, index) => (label.startsWith(current) ? [index] : []))
+  }
 
-  const feed = (input: Key): HintEvent => {
+  function feed(input: Key): HintEvent {
     if (input.ctrl || input.alt || input.meta) return { type: 'none' }
     if (input.key === 'Escape') return { type: 'dismiss' }
     if (input.key === 'Backspace') {

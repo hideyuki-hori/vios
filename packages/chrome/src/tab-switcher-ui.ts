@@ -1,12 +1,7 @@
 import { createTabSwitcher, filterByQuery, type TabSummary, type TabSwitcher } from '@vios/core'
-import {
-  requestActivateTab,
-  requestCloseTab,
-  requestCreateTab,
-  requestListTabs,
-} from '@vios/platform'
 import { toKey } from './keyboard'
-import { paletteCss } from './palette-css'
+import { requestActivateTab, requestCloseTab, requestCreateTab, requestListTabs } from './messaging'
+import paletteCss from './palette.css'
 
 type OpenState = {
   host: HTMLDivElement
@@ -21,16 +16,18 @@ type OpenState = {
 
 let state: OpenState | null = null
 
-export const isTabSwitcherOpen = (): boolean => state !== null
+export function isTabSwitcherOpen(): boolean {
+  return state !== null
+}
 
-const closeSwitcher = (): void => {
+function closeSwitcher(): void {
   if (!state) return
   state.host.remove()
   window.removeEventListener('blur', closeSwitcher)
   state = null
 }
 
-const updateSelection = (index: number): void => {
+function updateSelection(index: number): void {
   if (!state) return
   state.rows.forEach((row, i) => {
     row.classList.toggle('selected', i === index)
@@ -38,7 +35,7 @@ const updateSelection = (index: number): void => {
   state.rows[index]?.scrollIntoView({ block: 'nearest' })
 }
 
-const buildRows = (): void => {
+function buildRows(): void {
   if (!state) return
   state.listEl.textContent = ''
   state.rows = state.filtered.map((tab, index) => {
@@ -68,7 +65,7 @@ const buildRows = (): void => {
   }
 }
 
-const applyFilter = (query: string, preferredIndex: number): void => {
+function applyFilter(query: string, preferredIndex: number): void {
   if (!state) return
   state.filtered = filterByQuery(state.allTabs, query, (tab) => `${tab.title} ${tab.url}`)
   buildRows()
@@ -81,7 +78,7 @@ const applyFilter = (query: string, preferredIndex: number): void => {
   updateSelection(state.switcher.selectedIndex())
 }
 
-const mount = (tabs: TabSummary[], selectedIndex: number): void => {
+function mount(tabs: TabSummary[], selectedIndex: number): void {
   const host = document.createElement('div')
   const shadow = host.attachShadow({ mode: 'open' })
   const style = document.createElement('style')
@@ -116,7 +113,7 @@ const mount = (tabs: TabSummary[], selectedIndex: number): void => {
   window.addEventListener('blur', closeSwitcher)
 }
 
-export const openTabSwitcher = async (): Promise<void> => {
+export async function openTabSwitcher(): Promise<void> {
   if (state) return
   const tabs = await requestListTabs()
   if (tabs.length === 0) return
@@ -127,7 +124,7 @@ export const openTabSwitcher = async (): Promise<void> => {
   mount(tabs, activeIndex)
 }
 
-const refreshTabs = async (preferredIndex: number): Promise<void> => {
+async function refreshTabs(preferredIndex: number): Promise<void> {
   if (!state) return
   const tabs = await requestListTabs()
   if (!state) return
@@ -139,14 +136,16 @@ const refreshTabs = async (preferredIndex: number): Promise<void> => {
   applyFilter(state.input.value, preferredIndex)
 }
 
-const closeTabAndRefresh = async (tabId: number, previousIndex: number): Promise<void> => {
+async function closeTabAndRefresh(tabId: number, previousIndex: number): Promise<void> {
   await requestCloseTab(tabId)
   await refreshTabs(previousIndex)
 }
 
-const isSearchFocused = (): boolean => state !== null && state.shadow.activeElement === state.input
+function isSearchFocused(): boolean {
+  return state !== null && state.shadow.activeElement === state.input
+}
 
-const handleSearchModeKey = (event: KeyboardEvent): void => {
+function handleSearchModeKey(event: KeyboardEvent): void {
   if (!state) return
   switch (event.key) {
     case 'Enter': {
@@ -184,7 +183,7 @@ const handleSearchModeKey = (event: KeyboardEvent): void => {
   }
 }
 
-export const handleTabSwitcherKeydown = (event: KeyboardEvent): void => {
+export function handleTabSwitcherKeydown(event: KeyboardEvent): void {
   if (!state) return
   if (event.isComposing) return
   if (isSearchFocused()) {

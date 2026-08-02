@@ -5,10 +5,11 @@ const farJumpViewports = 3
 const holdDelayMs = 150
 const holdVelocityPxPerSec = 1000
 
-const clamp = (value: number, min: number, max: number): number =>
-  Math.min(Math.max(value, min), max)
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max)
+}
 
-export const createScroller = () => {
+export function createScroller() {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
   let target = 0
   let animating = false
@@ -18,9 +19,11 @@ export const createScroller = () => {
   let pendingDirection = 0
   let holdPending: number | undefined
 
-  const maxScroll = (): number => document.documentElement.scrollHeight - window.innerHeight
+  function maxScroll(): number {
+    return document.documentElement.scrollHeight - window.innerHeight
+  }
 
-  const stopAllHolds = (): void => {
+  function stopAllHolds(): void {
     if (holdPending !== undefined) {
       window.clearTimeout(holdPending)
       holdPending = undefined
@@ -29,7 +32,7 @@ export const createScroller = () => {
     holdDirection = 0
   }
 
-  const stopHold = (direction: number): void => {
+  function stopHold(direction: number): void {
     if (pendingDirection === direction) {
       if (holdPending !== undefined) {
         window.clearTimeout(holdPending)
@@ -40,7 +43,7 @@ export const createScroller = () => {
     if (holdDirection === direction) holdDirection = 0
   }
 
-  const frame = (time: number): void => {
+  function frame(time: number): void {
     if (!animating) return
     if (Math.abs(window.scrollY - expected) > externalScrollTolerancePx) {
       animating = false
@@ -68,7 +71,7 @@ export const createScroller = () => {
     requestAnimationFrame(frame)
   }
 
-  const startToward = (y: number): void => {
+  function startToward(y: number): void {
     target = clamp(y, 0, maxScroll())
     if (reduceMotion.matches) {
       window.scrollTo({ top: target, behavior: 'instant' })
@@ -88,7 +91,7 @@ export const createScroller = () => {
   }
 
   return {
-    startHold: (direction: number, step: number): void => {
+    startHold(direction: number, step: number): void {
       stopAllHolds()
       const base = animating ? target : window.scrollY
       startToward(base + step * direction)
@@ -101,7 +104,7 @@ export const createScroller = () => {
       }, holdDelayMs)
     },
     stopHold,
-    scrollTo: (y: number): void => {
+    scrollTo(y: number): void {
       stopAllHolds()
       startToward(y)
     },

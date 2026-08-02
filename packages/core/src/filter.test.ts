@@ -12,7 +12,9 @@ const items: Item[] = [
   { title: 'Vim日本語ドキュメント', url: 'https://vim-jp.org/vimdoc-ja' },
 ]
 
-const text = (item: Item): string => `${item.title} ${item.url}`
+function text(item: Item): string {
+  return `${item.title} ${item.url}`
+}
 
 describe('filterByQuery', () => {
   it('空クエリは全件を返す', () => {

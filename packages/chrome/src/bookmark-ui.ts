@@ -4,9 +4,9 @@ import {
   createBookmarkNavigator,
   filterByQuery,
 } from '@vios/core'
-import { requestCreateTab, requestListBookmarks } from '@vios/platform'
 import { toKey } from './keyboard'
-import { paletteCss } from './palette-css'
+import { requestCreateTab, requestListBookmarks } from './messaging'
+import paletteCss from './palette.css'
 
 type OpenState = {
   host: HTMLDivElement
@@ -21,16 +21,18 @@ type OpenState = {
 
 let state: OpenState | null = null
 
-export const isBookmarkPaletteOpen = (): boolean => state !== null
+export function isBookmarkPaletteOpen(): boolean {
+  return state !== null
+}
 
-const closePalette = (): void => {
+function closePalette(): void {
   if (!state) return
   state.host.remove()
   window.removeEventListener('blur', closePalette)
   state = null
 }
 
-const openBookmark = (bookmark: BookmarkSummary, newTab: boolean): void => {
+function openBookmark(bookmark: BookmarkSummary, newTab: boolean): void {
   if (newTab) {
     void requestCreateTab(bookmark.url)
     return
@@ -38,7 +40,7 @@ const openBookmark = (bookmark: BookmarkSummary, newTab: boolean): void => {
   location.assign(bookmark.url)
 }
 
-const updateSelection = (index: number): void => {
+function updateSelection(index: number): void {
   if (!state) return
   state.rows.forEach((row, i) => {
     row.classList.toggle('selected', i === index)
@@ -46,7 +48,7 @@ const updateSelection = (index: number): void => {
   state.rows[index]?.scrollIntoView({ block: 'nearest' })
 }
 
-const buildRows = (): void => {
+function buildRows(): void {
   if (!state) return
   state.listEl.textContent = ''
   state.rows = state.filtered.map((bookmark, index) => {
@@ -76,7 +78,7 @@ const buildRows = (): void => {
   }
 }
 
-const applyFilter = (query: string, preferredIndex: number): void => {
+function applyFilter(query: string, preferredIndex: number): void {
   if (!state) return
   state.filtered = filterByQuery(
     state.all,
@@ -93,7 +95,7 @@ const applyFilter = (query: string, preferredIndex: number): void => {
   updateSelection(state.navigator.selectedIndex())
 }
 
-const mount = (bookmarks: BookmarkSummary[]): void => {
+function mount(bookmarks: BookmarkSummary[]): void {
   const host = document.createElement('div')
   const shadow = host.attachShadow({ mode: 'open' })
   const style = document.createElement('style')
@@ -128,16 +130,18 @@ const mount = (bookmarks: BookmarkSummary[]): void => {
   window.addEventListener('blur', closePalette)
 }
 
-export const openBookmarkPalette = async (): Promise<void> => {
+export async function openBookmarkPalette(): Promise<void> {
   if (state) return
   const bookmarks = await requestListBookmarks()
   if (bookmarks.length === 0) return
   mount(bookmarks)
 }
 
-const isSearchFocused = (): boolean => state !== null && state.shadow.activeElement === state.input
+function isSearchFocused(): boolean {
+  return state !== null && state.shadow.activeElement === state.input
+}
 
-const handleSearchModeKey = (event: KeyboardEvent): void => {
+function handleSearchModeKey(event: KeyboardEvent): void {
   if (!state) return
   switch (event.key) {
     case 'Enter': {
@@ -175,7 +179,7 @@ const handleSearchModeKey = (event: KeyboardEvent): void => {
   }
 }
 
-export const handleBookmarkKeydown = (event: KeyboardEvent): void => {
+export function handleBookmarkKeydown(event: KeyboardEvent): void {
   if (!state) return
   if (event.isComposing) return
   if (isSearchFocused()) {

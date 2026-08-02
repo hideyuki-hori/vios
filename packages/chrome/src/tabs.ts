@@ -1,6 +1,6 @@
 import type { TabSummary } from '@vios/core'
 
-export const listTabs = async (windowId?: number): Promise<TabSummary[]> => {
+export async function listTabs(windowId?: number): Promise<TabSummary[]> {
   const tabs = await chrome.tabs.query(
     windowId === undefined ? { currentWindow: true } : { windowId },
   )
@@ -11,14 +11,14 @@ export const listTabs = async (windowId?: number): Promise<TabSummary[]> => {
   )
 }
 
-export const activateTab = async (tabId: number): Promise<void> => {
+export async function activateTab(tabId: number): Promise<void> {
   await chrome.tabs.update(tabId, { active: true })
 }
 
-export const closeTab = async (tabId: number): Promise<void> => {
+export async function closeTab(tabId: number): Promise<void> {
   await chrome.tabs.remove(tabId)
 }
 
-export const createTab = async (url?: string): Promise<void> => {
+export async function createTab(url?: string): Promise<void> {
   await chrome.tabs.create(url === undefined ? {} : { url })
 }

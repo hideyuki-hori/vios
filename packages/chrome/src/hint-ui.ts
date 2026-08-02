@@ -1,29 +1,6 @@
 import { createHintSession, generateHintLabels, type HintSession } from '@vios/core'
+import hintCss from './hint.css'
 import { toKey } from './keyboard'
-
-const css = `
-.layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2147483647;
-}
-.hint {
-  position: absolute;
-  background: #ffd76e;
-  color: #302505;
-  border: 1px solid #c9a84c;
-  border-radius: 3px;
-  padding: 1px 4px;
-  font: bold 11px/1.2 system-ui, sans-serif;
-  text-transform: uppercase;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  white-space: nowrap;
-}
-.hint.hidden {
-  display: none;
-}
-`
 
 const clickableSelector = [
   'a[href]',
@@ -64,16 +41,18 @@ type HintState = {
 
 let state: HintState | null = null
 
-export const isHintModeActive = (): boolean => state !== null
+export function isHintModeActive(): boolean {
+  return state !== null
+}
 
-const closeHints = (): void => {
+function closeHints(): void {
   if (!state) return
   state.host.remove()
   window.removeEventListener('blur', closeHints)
   state = null
 }
 
-const collectTargets = (): HTMLElement[] => {
+function collectTargets(): HTMLElement[] {
   const elements = document.querySelectorAll<HTMLElement>(clickableSelector)
   const result: HTMLElement[] = []
   for (const element of elements) {
@@ -87,7 +66,7 @@ const collectTargets = (): HTMLElement[] => {
   return result
 }
 
-const activate = (element: HTMLElement): void => {
+function activate(element: HTMLElement): void {
   if (element instanceof HTMLInputElement) {
     if (textInputTypes.has(element.type)) {
       element.focus()
@@ -107,7 +86,7 @@ const activate = (element: HTMLElement): void => {
   element.click()
 }
 
-export const openHints = (): void => {
+export function openHints(): void {
   if (state) return
   const elements = collectTargets()
   if (elements.length === 0) return
@@ -115,7 +94,7 @@ export const openHints = (): void => {
   const host = document.createElement('div')
   const shadow = host.attachShadow({ mode: 'open' })
   const style = document.createElement('style')
-  style.textContent = css
+  style.textContent = hintCss
   const layer = document.createElement('div')
   layer.className = 'layer'
   const badges = elements.map((element, index) => {
@@ -134,7 +113,7 @@ export const openHints = (): void => {
   window.addEventListener('blur', closeHints)
 }
 
-const showCandidates = (candidates: number[]): void => {
+function showCandidates(candidates: number[]): void {
   if (!state) return
   const visible = new Set(candidates)
   state.badges.forEach((badge, index) => {
@@ -142,7 +121,7 @@ const showCandidates = (candidates: number[]): void => {
   })
 }
 
-export const handleHintKeydown = (event: KeyboardEvent): void => {
+export function handleHintKeydown(event: KeyboardEvent): void {
   if (!state) return
   if (event.isComposing) return
   const input = toKey(event)

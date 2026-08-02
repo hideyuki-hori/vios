@@ -23,9 +23,6 @@ importers:
       '@vios/core':
         specifier: workspace:*
         version: link:../core
-      '@vios/platform':
-        specifier: workspace:*
-        version: link:../platform
     devDependencies:
       '@types/chrome':
         specifier: ^0.2.5
@@ -39,16 +36,6 @@ importers:
       vitest:
         specifier: ^4.1.10
         version: 4.1.10(vite@8.2.0(esbuild@0.28.1))
-
-  packages/platform:
-    dependencies:
-      '@vios/core':
-        specifier: workspace:*
-        version: link:../core
-    devDependencies:
-      '@types/chrome':
-        specifier: ^0.2.5
-        version: 0.2.5
 
 packages:
 

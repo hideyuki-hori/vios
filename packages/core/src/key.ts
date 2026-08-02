@@ -6,17 +6,16 @@ export type Key = {
   shift: boolean
 }
 
-export const key = (k: string): Key => ({
-  key: k,
-  ctrl: false,
-  alt: false,
-  meta: false,
-  shift: false,
-})
+export function key(k: string): Key {
+  return { key: k, ctrl: false, alt: false, meta: false, shift: false }
+}
 
-export const keysEqual = (a: Key, b: Key): boolean =>
-  a.key === b.key &&
-  a.ctrl === b.ctrl &&
-  a.alt === b.alt &&
-  a.meta === b.meta &&
-  a.shift === b.shift
+export function keysEqual(a: Key, b: Key): boolean {
+  return (
+    a.key === b.key &&
+    a.ctrl === b.ctrl &&
+    a.alt === b.alt &&
+    a.meta === b.meta &&
+    a.shift === b.shift
+  )
+}

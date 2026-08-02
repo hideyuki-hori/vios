@@ -13,6 +13,7 @@ const options = {
   target: 'chrome120',
   logLevel: 'info',
   define: { __DEV__: watch ? 'true' : 'false' },
+  loader: { '.css': 'text' },
 }
 
 await cp('public', 'dist', { recursive: true })

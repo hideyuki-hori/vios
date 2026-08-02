@@ -11,18 +11,20 @@ export type BookmarkNavigator = {
   selectedIndex: () => number
 }
 
-const clampIndex = (index: number, count: number): number => Math.min(Math.max(index, 0), count - 1)
+function clampIndex(index: number, count: number): number {
+  return Math.min(Math.max(index, 0), count - 1)
+}
 
-export const createBookmarkNavigator = (count: number, initialIndex: number): BookmarkNavigator => {
+export function createBookmarkNavigator(count: number, initialIndex: number): BookmarkNavigator {
   let selected = clampIndex(initialIndex, count)
   let digits = ''
 
-  const select = (index: number): BookmarkNavigatorEvent => {
+  function select(index: number): BookmarkNavigatorEvent {
     selected = index
     return { type: 'selectionChanged', index }
   }
 
-  const feedDigit = (digit: string): BookmarkNavigatorEvent => {
+  function feedDigit(digit: string): BookmarkNavigatorEvent {
     const appended = digits + digit
     const byAppended = Number(appended)
     if (byAppended >= 1 && byAppended <= count) {
@@ -38,7 +40,7 @@ export const createBookmarkNavigator = (count: number, initialIndex: number): Bo
     return { type: 'none' }
   }
 
-  const feed = (input: Key): BookmarkNavigatorEvent => {
+  function feed(input: Key): BookmarkNavigatorEvent {
     if (input.ctrl || input.alt || input.meta) return { type: 'none' }
     if (/^[0-9]$/.test(input.key)) return feedDigit(input.key)
     digits = ''
@@ -58,5 +60,10 @@ export const createBookmarkNavigator = (count: number, initialIndex: number): Bo
     }
   }
 
-  return { feed, selectedIndex: () => selected }
+  return {
+    feed,
+    selectedIndex() {
+      return selected
+    },
+  }
 }

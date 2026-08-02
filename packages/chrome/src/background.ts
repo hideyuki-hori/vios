@@ -1,13 +1,15 @@
-import { type BackgroundRequest, extensionName } from '@vios/core'
-import { activateTab, closeTab, createTab, listBookmarks, listTabs } from '@vios/platform'
+import { extensionName } from '@vios/core'
+import { listBookmarks } from './bookmarks'
 import { startDevReload } from './dev-reload'
+import type { BackgroundRequest } from './messages'
+import { activateTab, closeTab, createTab, listTabs } from './tabs'
 
 console.log(`[${extensionName}] background loaded`)
 
-const handleRequest = async (
+async function handleRequest(
   request: BackgroundRequest,
   sender: chrome.runtime.MessageSender,
-): Promise<unknown> => {
+): Promise<unknown> {
   switch (request.type) {
     case 'listTabs':
       return listTabs(sender.tab?.windowId)
