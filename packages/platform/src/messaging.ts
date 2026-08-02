@@ -1,4 +1,4 @@
-import type { TabSummary } from '@vios/core'
+import type { BookmarkSummary, TabSummary } from '@vios/core'
 
 export const requestListTabs = (): Promise<TabSummary[]> =>
   chrome.runtime.sendMessage({ type: 'listTabs' })
@@ -12,5 +12,8 @@ export const requestCloseTab = (tabId: number): Promise<void> =>
 export const requestCloseCurrentTab = (): Promise<void> =>
   chrome.runtime.sendMessage({ type: 'closeCurrentTab' })
 
-export const requestCreateTab = (): Promise<void> =>
-  chrome.runtime.sendMessage({ type: 'createTab' })
+export const requestCreateTab = (url?: string): Promise<void> =>
+  chrome.runtime.sendMessage({ type: 'createTab', url })
+
+export const requestListBookmarks = (): Promise<BookmarkSummary[]> =>
+  chrome.runtime.sendMessage({ type: 'listBookmarks' })

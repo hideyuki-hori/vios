@@ -1,3 +1,9 @@
+export type { BookmarkSummary } from './bookmark'
+export {
+  type BookmarkNavigator,
+  type BookmarkNavigatorEvent,
+  createBookmarkNavigator,
+} from './bookmark-navigator'
 export { filterByQuery } from './filter'
 export {
   createHintSession,

@@ -1,10 +1,10 @@
-import { createTabSwitcher, filterByQuery, type TabSummary, type TabSwitcher } from '@vios/core'
 import {
-  requestActivateTab,
-  requestCloseTab,
-  requestCreateTab,
-  requestListTabs,
-} from '@vios/platform'
+  type BookmarkNavigator,
+  type BookmarkSummary,
+  createBookmarkNavigator,
+  filterByQuery,
+} from '@vios/core'
+import { requestCreateTab, requestListBookmarks } from '@vios/platform'
 import { toKey } from './keyboard'
 import { paletteCss } from './palette-css'
 
@@ -14,20 +14,28 @@ type OpenState = {
   input: HTMLInputElement
   listEl: HTMLUListElement
   rows: HTMLLIElement[]
-  allTabs: TabSummary[]
-  filtered: TabSummary[]
-  switcher: TabSwitcher | null
+  all: BookmarkSummary[]
+  filtered: BookmarkSummary[]
+  navigator: BookmarkNavigator | null
 }
 
 let state: OpenState | null = null
 
-export const isTabSwitcherOpen = (): boolean => state !== null
+export const isBookmarkPaletteOpen = (): boolean => state !== null
 
-const closeSwitcher = (): void => {
+const closePalette = (): void => {
   if (!state) return
   state.host.remove()
-  window.removeEventListener('blur', closeSwitcher)
+  window.removeEventListener('blur', closePalette)
   state = null
+}
+
+const openBookmark = (bookmark: BookmarkSummary, newTab: boolean): void => {
+  if (newTab) {
+    void requestCreateTab(bookmark.url)
+    return
+  }
+  location.assign(bookmark.url)
 }
 
 const updateSelection = (index: number): void => {
@@ -41,7 +49,7 @@ const updateSelection = (index: number): void => {
 const buildRows = (): void => {
   if (!state) return
   state.listEl.textContent = ''
-  state.rows = state.filtered.map((tab, index) => {
+  state.rows = state.filtered.map((bookmark, index) => {
     const row = document.createElement('li')
     row.className = 'row'
     const num = document.createElement('span')
@@ -51,10 +59,10 @@ const buildRows = (): void => {
     texts.className = 'texts'
     const title = document.createElement('div')
     title.className = 'title'
-    title.textContent = tab.title === '' ? tab.url : tab.title
+    title.textContent = bookmark.title === '' ? bookmark.url : bookmark.title
     const url = document.createElement('div')
     url.className = 'url'
-    url.textContent = tab.url
+    url.textContent = bookmark.path === '' ? bookmark.url : `${bookmark.path} · ${bookmark.url}`
     texts.append(title, url)
     row.append(num, texts)
     state?.listEl.append(row)
@@ -63,25 +71,29 @@ const buildRows = (): void => {
   if (state.filtered.length === 0) {
     const empty = document.createElement('li')
     empty.className = 'empty'
-    empty.textContent = '該当するタブがありません'
+    empty.textContent = '該当するブックマークがありません'
     state.listEl.append(empty)
   }
 }
 
 const applyFilter = (query: string, preferredIndex: number): void => {
   if (!state) return
-  state.filtered = filterByQuery(state.allTabs, query, (tab) => `${tab.title} ${tab.url}`)
+  state.filtered = filterByQuery(
+    state.all,
+    query,
+    (bookmark) => `${bookmark.title} ${bookmark.url} ${bookmark.path}`,
+  )
   buildRows()
   if (state.filtered.length === 0) {
-    state.switcher = null
+    state.navigator = null
     return
   }
   const initial = Math.min(preferredIndex, state.filtered.length - 1)
-  state.switcher = createTabSwitcher(state.filtered.length, initial)
-  updateSelection(state.switcher.selectedIndex())
+  state.navigator = createBookmarkNavigator(state.filtered.length, initial)
+  updateSelection(state.navigator.selectedIndex())
 }
 
-const mount = (tabs: TabSummary[], selectedIndex: number): void => {
+const mount = (bookmarks: BookmarkSummary[]): void => {
   const host = document.createElement('div')
   const shadow = host.attachShadow({ mode: 'open' })
   const style = document.createElement('style')
@@ -108,40 +120,19 @@ const mount = (tabs: TabSummary[], selectedIndex: number): void => {
     input,
     listEl,
     rows: [],
-    allTabs: tabs,
+    all: bookmarks,
     filtered: [],
-    switcher: null,
+    navigator: null,
   }
-  applyFilter('', selectedIndex)
-  window.addEventListener('blur', closeSwitcher)
+  applyFilter('', 0)
+  window.addEventListener('blur', closePalette)
 }
 
-export const openTabSwitcher = async (): Promise<void> => {
+export const openBookmarkPalette = async (): Promise<void> => {
   if (state) return
-  const tabs = await requestListTabs()
-  if (tabs.length === 0) return
-  const activeIndex = Math.max(
-    tabs.findIndex((tab) => tab.active),
-    0,
-  )
-  mount(tabs, activeIndex)
-}
-
-const refreshTabs = async (preferredIndex: number): Promise<void> => {
-  if (!state) return
-  const tabs = await requestListTabs()
-  if (!state) return
-  if (tabs.length === 0) {
-    closeSwitcher()
-    return
-  }
-  state.allTabs = tabs
-  applyFilter(state.input.value, preferredIndex)
-}
-
-const closeTabAndRefresh = async (tabId: number, previousIndex: number): Promise<void> => {
-  await requestCloseTab(tabId)
-  await refreshTabs(previousIndex)
+  const bookmarks = await requestListBookmarks()
+  if (bookmarks.length === 0) return
+  mount(bookmarks)
 }
 
 const isSearchFocused = (): boolean => state !== null && state.shadow.activeElement === state.input
@@ -154,9 +145,9 @@ const handleSearchModeKey = (event: KeyboardEvent): void => {
       event.stopPropagation()
       if (state.filtered.length === 0) return
       if (state.filtered.length === 1) {
-        const tab = state.filtered[0]
-        closeSwitcher()
-        if (tab) void requestActivateTab(tab.id)
+        const bookmark = state.filtered[0]
+        closePalette()
+        if (bookmark) openBookmark(bookmark, event.shiftKey)
         return
       }
       state.input.blur()
@@ -174,8 +165,8 @@ const handleSearchModeKey = (event: KeyboardEvent): void => {
     case 'ArrowUp': {
       event.preventDefault()
       event.stopPropagation()
-      if (!state.switcher) return
-      const result = state.switcher.feed(toKey(event))
+      if (!state.navigator) return
+      const result = state.navigator.feed(toKey(event))
       if (result.type === 'selectionChanged') updateSelection(result.index)
       return
     }
@@ -184,7 +175,7 @@ const handleSearchModeKey = (event: KeyboardEvent): void => {
   }
 }
 
-export const handleTabSwitcherKeydown = (event: KeyboardEvent): void => {
+export const handleBookmarkKeydown = (event: KeyboardEvent): void => {
   if (!state) return
   if (event.isComposing) return
   if (isSearchFocused()) {
@@ -197,32 +188,23 @@ export const handleTabSwitcherKeydown = (event: KeyboardEvent): void => {
     state.input.focus()
     return
   }
-  if (!state.switcher) {
-    if (event.key === 'Escape') closeSwitcher()
+  if (!state.navigator) {
+    if (event.key === 'Escape') closePalette()
     return
   }
-  const result = state.switcher.feed(toKey(event))
+  const result = state.navigator.feed(toKey(event))
   switch (result.type) {
     case 'selectionChanged':
       updateSelection(result.index)
       return
-    case 'activate': {
-      const tab = state.filtered[result.index]
-      closeSwitcher()
-      if (tab) void requestActivateTab(tab.id)
+    case 'open': {
+      const bookmark = state.filtered[result.index]
+      closePalette()
+      if (bookmark) openBookmark(bookmark, result.newTab)
       return
     }
-    case 'closeTab': {
-      const tab = state.filtered[result.index]
-      if (tab) void closeTabAndRefresh(tab.id, result.index)
-      return
-    }
-    case 'newTab':
-      closeSwitcher()
-      void requestCreateTab()
-      return
     case 'dismiss':
-      closeSwitcher()
+      closePalette()
       return
     case 'none':
       return

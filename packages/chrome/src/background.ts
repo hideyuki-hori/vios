@@ -1,5 +1,5 @@
 import { type BackgroundRequest, extensionName } from '@vios/core'
-import { activateTab, closeTab, createTab, listTabs } from '@vios/platform'
+import { activateTab, closeTab, createTab, listBookmarks, listTabs } from '@vios/platform'
 import { startDevReload } from './dev-reload'
 
 console.log(`[${extensionName}] background loaded`)
@@ -23,8 +23,10 @@ const handleRequest = async (
       return undefined
     }
     case 'createTab':
-      await createTab()
+      await createTab(request.url)
       return undefined
+    case 'listBookmarks':
+      return listBookmarks()
   }
 }
 

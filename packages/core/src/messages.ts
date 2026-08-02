@@ -3,4 +3,5 @@ export type BackgroundRequest =
   | { type: 'activateTab'; tabId: number }
   | { type: 'closeTab'; tabId: number }
   | { type: 'closeCurrentTab' }
-  | { type: 'createTab' }
+  | { type: 'createTab'; url?: string }
+  | { type: 'listBookmarks' }

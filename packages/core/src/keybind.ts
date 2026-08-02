@@ -11,6 +11,7 @@ export type Action =
   | 'closeCurrentTab'
   | 'reloadPage'
   | 'enterHintMode'
+  | 'openBookmarks'
 
 export type Keybind = {
   sequence: Key[]
@@ -28,4 +29,5 @@ export const defaultKeybinds: Keybind[] = [
   { sequence: [key('x')], action: 'closeCurrentTab' },
   { sequence: [key('r')], action: 'reloadPage' },
   { sequence: [key('f')], action: 'enterHintMode' },
+  { sequence: [key('b')], action: 'openBookmarks' },
 ]

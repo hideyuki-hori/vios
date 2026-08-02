@@ -1,5 +1,6 @@
 import type { Action } from '@vios/core'
 import { requestCloseCurrentTab } from '@vios/platform'
+import { openBookmarkPalette } from './bookmark-ui'
 import { openHints } from './hint-ui'
 import { createScroller } from './scroller'
 import { openTabSwitcher } from './tab-switcher-ui'
@@ -26,6 +27,9 @@ const performers: Record<Action, () => void> = {
   },
   enterHintMode: () => {
     openHints()
+  },
+  openBookmarks: () => {
+    void openBookmarkPalette()
   },
 }
 

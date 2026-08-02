@@ -3,7 +3,7 @@
   "name": "vios",
   "version": "0.1.0",
   "description": "Vim-like keyboard navigation and utilities",
-  "permissions": ["tabs"],
+  "permissions": ["tabs", "bookmarks"],
   "background": {
     "service_worker": "background.js"
   },

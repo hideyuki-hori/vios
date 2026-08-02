@@ -1,5 +1,6 @@
 import { createKeybindMatcher, defaultKeybinds } from '@vios/core'
 import { performAction } from './actions'
+import { handleBookmarkKeydown, isBookmarkPaletteOpen } from './bookmark-ui'
 import { handleHintKeydown, isHintModeActive } from './hint-ui'
 import { shouldIgnore, toKey } from './keyboard'
 import { handleTabSwitcherKeydown, isTabSwitcherOpen } from './tab-switcher-ui'
@@ -21,6 +22,10 @@ window.addEventListener(
   (event) => {
     if (isTabSwitcherOpen()) {
       handleTabSwitcherKeydown(event)
+      return
+    }
+    if (isBookmarkPaletteOpen()) {
+      handleBookmarkKeydown(event)
       return
     }
     if (isHintModeActive()) {

@@ -19,6 +19,6 @@ export const closeTab = async (tabId: number): Promise<void> => {
   await chrome.tabs.remove(tabId)
 }
 
-export const createTab = async (): Promise<void> => {
-  await chrome.tabs.create({})
+export const createTab = async (url?: string): Promise<void> => {
+  await chrome.tabs.create(url === undefined ? {} : { url })
 }
