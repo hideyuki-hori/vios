@@ -1,10 +1,15 @@
 import { describe, expect, it } from 'vitest'
 import {
   activeBlockedDomains,
+  addBlockedDomain,
+  applyUnlock,
+  clearUnlock,
   isUnlockCommand,
   isUnlocked,
   matchesDomain,
   normalizeDomain,
+  removeBlockedDomain,
+  unlockDurationMs,
 } from './block.core'
 
 describe('normalizeDomain', () => {
@@ -73,5 +78,55 @@ describe('activeBlockedDomains', () => {
     }
     expect(activeBlockedDomains(state, 500)).toEqual(['twitter.com'])
     expect(activeBlockedDomains(state, 1500)).toEqual(['youtube.com', 'twitter.com'])
+  })
+})
+
+describe('addBlockedDomain', () => {
+  it('末尾にドメインを追加する', () => {
+    const state = { domains: ['youtube.com'], unlocks: {} }
+    expect(addBlockedDomain(state, 'twitter.com')).toEqual({
+      domains: ['youtube.com', 'twitter.com'],
+      unlocks: {},
+    })
+  })
+})
+
+describe('removeBlockedDomain', () => {
+  it('ドメインとそのunlockを取り除き、他は残す', () => {
+    const state = {
+      domains: ['youtube.com', 'twitter.com'],
+      unlocks: { 'youtube.com': 1000, 'twitter.com': 2000 },
+    }
+    expect(removeBlockedDomain(state, 'youtube.com')).toEqual({
+      domains: ['twitter.com'],
+      unlocks: { 'twitter.com': 2000 },
+    })
+  })
+})
+
+describe('applyUnlock', () => {
+  it('登録済みドメインにnowから1時間の期限を付ける', () => {
+    const state = { domains: ['youtube.com'], unlocks: {} }
+    expect(applyUnlock(state, 'youtube.com', 500)).toEqual({
+      state: { domains: ['youtube.com'], unlocks: { 'youtube.com': 500 + unlockDurationMs } },
+      expiry: 500 + unlockDurationMs,
+    })
+  })
+
+  it('未登録ドメインにはnullを返す', () => {
+    expect(applyUnlock({ domains: [], unlocks: {} }, 'youtube.com', 0)).toBeNull()
+  })
+})
+
+describe('clearUnlock', () => {
+  it('指定ドメインのunlockだけを取り除く', () => {
+    const state = {
+      domains: ['youtube.com', 'twitter.com'],
+      unlocks: { 'youtube.com': 1000, 'twitter.com': 2000 },
+    }
+    expect(clearUnlock(state, 'youtube.com')).toEqual({
+      domains: ['youtube.com', 'twitter.com'],
+      unlocks: { 'twitter.com': 2000 },
+    })
   })
 })

@@ -1,4 +1,4 @@
-import { normalizeDomain } from '../../lib/block.core'
+import { addBlockedDomain, normalizeDomain, removeBlockedDomain } from '../../lib/block.core'
 import { findOpenTabs, reblockAlarmPrefix, syncBlockRules } from '../../lib/block.gateway'
 import { loadBlockState, saveBlockState } from '../../lib/block.storage'
 import { byId, inputById } from '../../lib/dom'
@@ -33,21 +33,14 @@ async function render(): Promise<void> {
 }
 
 async function removeDomain(domain: string): Promise<void> {
-  const state = await loadBlockState()
-  state.domains = state.domains.filter((entry) => entry !== domain)
-  state.unlocks = Object.fromEntries(
-    Object.entries(state.unlocks).filter(([key]) => key !== domain),
-  )
-  await saveBlockState(state)
+  await saveBlockState(removeBlockedDomain(await loadBlockState(), domain))
   await syncBlockRules()
   await chrome.alarms.clear(`${reblockAlarmPrefix}${domain}`)
   await render()
 }
 
 async function commitAdd(domain: string): Promise<void> {
-  const state = await loadBlockState()
-  state.domains = [...state.domains, domain]
-  await saveBlockState(state)
+  await saveBlockState(addBlockedDomain(await loadBlockState(), domain))
   await syncBlockRules()
   inputEl.value = ''
   await render()

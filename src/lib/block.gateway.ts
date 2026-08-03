@@ -1,7 +1,5 @@
-import { activeBlockedDomains, matchesDomain } from './block.core'
+import { activeBlockedDomains, applyUnlock, clearUnlock, matchesDomain } from './block.core'
 import { loadBlockState, saveBlockState } from './block.storage'
-
-const unlockDurationMs = 60 * 60 * 1000
 
 export const reblockAlarmPrefix = 'reblock:'
 
@@ -57,22 +55,16 @@ export async function redirectOpenTabs(domain: string): Promise<void> {
 }
 
 export async function unlockDomain(domain: string): Promise<boolean> {
-  const state = await loadBlockState()
-  if (!state.domains.includes(domain)) return false
-  const expiry = Date.now() + unlockDurationMs
-  state.unlocks = { ...state.unlocks, [domain]: expiry }
-  await saveBlockState(state)
+  const result = applyUnlock(await loadBlockState(), domain, Date.now())
+  if (result === null) return false
+  await saveBlockState(result.state)
   await syncBlockRules()
-  await chrome.alarms.create(`${reblockAlarmPrefix}${domain}`, { when: expiry })
+  await chrome.alarms.create(`${reblockAlarmPrefix}${domain}`, { when: result.expiry })
   return true
 }
 
 export async function handleReblock(domain: string): Promise<void> {
-  const state = await loadBlockState()
-  state.unlocks = Object.fromEntries(
-    Object.entries(state.unlocks).filter(([key]) => key !== domain),
-  )
-  await saveBlockState(state)
+  await saveBlockState(clearUnlock(await loadBlockState(), domain))
   await syncBlockRules()
   await redirectOpenTabs(domain)
 }

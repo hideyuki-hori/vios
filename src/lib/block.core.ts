@@ -36,3 +36,34 @@ export function isUnlocked(unlocks: Record<string, number>, domain: string, now:
 export function activeBlockedDomains(state: BlockState, now: number): string[] {
   return state.domains.filter((domain) => !isUnlocked(state.unlocks, domain, now))
 }
+
+export const unlockDurationMs = 60 * 60 * 1000
+
+function withoutUnlock(unlocks: Record<string, number>, domain: string): Record<string, number> {
+  return Object.fromEntries(Object.entries(unlocks).filter(([key]) => key !== domain))
+}
+
+export function addBlockedDomain(state: BlockState, domain: string): BlockState {
+  return { ...state, domains: [...state.domains, domain] }
+}
+
+export function removeBlockedDomain(state: BlockState, domain: string): BlockState {
+  return {
+    domains: state.domains.filter((entry) => entry !== domain),
+    unlocks: withoutUnlock(state.unlocks, domain),
+  }
+}
+
+export function applyUnlock(
+  state: BlockState,
+  domain: string,
+  now: number,
+): { state: BlockState; expiry: number } | null {
+  if (!state.domains.includes(domain)) return null
+  const expiry = now + unlockDurationMs
+  return { state: { ...state, unlocks: { ...state.unlocks, [domain]: expiry } }, expiry }
+}
+
+export function clearUnlock(state: BlockState, domain: string): BlockState {
+  return { ...state, unlocks: withoutUnlock(state.unlocks, domain) }
+}
