@@ -1,4 +1,4 @@
-import { type BlockState, parseBlockState } from './block.core'
+import { type BlockState, parseBlockState } from '~/lib/block.core'
 
 const storageKey = 'blockState'
 

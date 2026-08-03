@@ -12,7 +12,7 @@ import {
   parseBlockState,
   removeBlockedDomain,
   unlockDurationMs,
-} from './block.core'
+} from '~/lib/block.core'
 
 describe('normalizeDomain', () => {
   it('素のドメインを受け付ける', () => {

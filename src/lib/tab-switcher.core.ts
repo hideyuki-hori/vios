@@ -1,5 +1,5 @@
-import type { PaletteConfig, PaletteItem } from './palette.core'
-import type { TabSummary } from './tabs.core'
+import type { PaletteConfig, PaletteItem } from '~/lib/palette.core'
+import type { TabSummary } from '~/lib/tabs.core'
 
 export type TabCommand = 'closeTab' | 'newTab'
 

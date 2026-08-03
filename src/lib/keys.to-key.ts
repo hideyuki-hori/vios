@@ -1,4 +1,4 @@
-import type { Key } from './keys.core'
+import type { Key } from '~/lib/keys.core'
 
 function isEditable(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false

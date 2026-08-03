@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { flattenBookmarkTree, toBookmarkPaletteItems } from './bookmarks.core'
+import { flattenBookmarkTree, toBookmarkPaletteItems } from '~/lib/bookmarks.core'
 
 describe('flattenBookmarkTree', () => {
   it('フォルダ階層をパスにしてurlノードだけを集める', () => {

@@ -1,4 +1,4 @@
-import { toKey } from './keys.to-key'
+import { toKey } from '~/lib/keys.to-key'
 import {
   createPalette,
   type Palette,
@@ -6,8 +6,8 @@ import {
   type PaletteEvent,
   type PaletteItem,
   type PaletteView,
-} from './palette.core'
-import paletteCss from './palette.css'
+} from '~/lib/palette.core'
+import paletteCss from '~/lib/palette.css'
 
 const searchModeKeys = new Set(['Enter', 'Escape', 'ArrowDown', 'ArrowUp'])
 

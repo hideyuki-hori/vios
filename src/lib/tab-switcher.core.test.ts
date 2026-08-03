@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { activeTabIndex, toTabPaletteItems } from './tab-switcher.core'
+import { activeTabIndex, toTabPaletteItems } from '~/lib/tab-switcher.core'
 
 describe('toTabPaletteItems', () => {
   it('タブをPaletteItemに整形し、タイトルが空ならURLを表示する', () => {

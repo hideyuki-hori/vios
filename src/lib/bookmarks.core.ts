@@ -1,4 +1,4 @@
-import type { PaletteConfig, PaletteItem } from './palette.core'
+import type { PaletteConfig, PaletteItem } from '~/lib/palette.core'
 
 export type BookmarkSummary = {
   id: string

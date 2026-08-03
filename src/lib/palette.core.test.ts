@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { key } from './keys.core'
-import { createPalette, filterByQuery, type PaletteConfig, type PaletteItem } from './palette.core'
+import { key } from '~/lib/keys.core'
+import {
+  createPalette,
+  filterByQuery,
+  type PaletteConfig,
+  type PaletteItem,
+} from '~/lib/palette.core'
 
 type Item = {
   title: string

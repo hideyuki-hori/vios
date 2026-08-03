@@ -1,4 +1,4 @@
-import type { TabSummary } from './tabs.core'
+import type { TabSummary } from '~/lib/tabs.core'
 
 export function requestListTabs(): Promise<TabSummary[]> {
   return chrome.runtime.sendMessage({ type: 'listTabs' })

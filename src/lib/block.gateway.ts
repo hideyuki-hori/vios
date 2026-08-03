@@ -4,8 +4,8 @@ import {
   buildBlockRules,
   clearUnlock,
   matchesDomain,
-} from './block.core'
-import { loadBlockState, saveBlockState } from './block.storage'
+} from '~/lib/block.core'
+import { loadBlockState, saveBlockState } from '~/lib/block.storage'
 
 export const reblockAlarmPrefix = 'reblock:'
 

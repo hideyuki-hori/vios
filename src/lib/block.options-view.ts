@@ -1,7 +1,7 @@
-import { addBlockedDomain, normalizeDomain, removeBlockedDomain } from './block.core'
-import { findOpenTabs, reblockAlarmPrefix, syncBlockRules } from './block.gateway'
-import { loadBlockState, saveBlockState } from './block.storage'
-import { byId, inputById } from './dom'
+import { addBlockedDomain, normalizeDomain, removeBlockedDomain } from '~/lib/block.core'
+import { findOpenTabs, reblockAlarmPrefix, syncBlockRules } from '~/lib/block.gateway'
+import { loadBlockState, saveBlockState } from '~/lib/block.storage'
+import { byId, inputById } from '~/lib/dom'
 
 export function initOptionsPage(): void {
   const inputEl = inputById('input')

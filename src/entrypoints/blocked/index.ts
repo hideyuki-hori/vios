@@ -1,3 +1,3 @@
-import { initBlockedPage } from '../../lib/block.blocked-view'
+import { initBlockedPage } from '~/lib/block.blocked-view'
 
 initBlockedPage()
