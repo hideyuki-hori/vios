@@ -1,51 +1,40 @@
 import { describe, expect, it } from 'vitest'
-import { key } from './keys.core'
-import { createTabSwitcher } from './tab-switcher.core'
+import { activeTabIndex, toTabPaletteItems } from './tab-switcher.core'
 
-describe('createTabSwitcher', () => {
-  it('j/kで選択が移動し、端でクランプされる', () => {
-    const switcher = createTabSwitcher(3, 0)
-    expect(switcher.feed(key('j'))).toEqual({ type: 'selectionChanged', index: 1 })
-    expect(switcher.feed(key('j'))).toEqual({ type: 'selectionChanged', index: 2 })
-    expect(switcher.feed(key('j'))).toEqual({ type: 'selectionChanged', index: 2 })
-    expect(switcher.feed(key('k'))).toEqual({ type: 'selectionChanged', index: 1 })
+describe('toTabPaletteItems', () => {
+  it('タブをPaletteItemに整形し、タイトルが空ならURLを表示する', () => {
+    expect(
+      toTabPaletteItems([
+        { id: 1, title: 'GitHub', url: 'https://github.com', active: true },
+        { id: 2, title: '', url: 'https://example.com', active: false },
+      ]),
+    ).toEqual([
+      {
+        id: '1',
+        primary: 'GitHub',
+        secondary: 'https://github.com',
+        searchText: 'GitHub https://github.com',
+      },
+      {
+        id: '2',
+        primary: 'https://example.com',
+        secondary: 'https://example.com',
+        searchText: ' https://example.com',
+      },
+    ])
+  })
+})
+
+describe('activeTabIndex', () => {
+  it('アクティブなタブの位置を返す', () => {
+    const tabs = [
+      { id: 1, title: 'a', url: 'https://a.test', active: false },
+      { id: 2, title: 'b', url: 'https://b.test', active: true },
+    ]
+    expect(activeTabIndex(tabs)).toBe(1)
   })
 
-  it('数字で選択が移動し、Enterで確定する', () => {
-    const switcher = createTabSwitcher(5, 0)
-    expect(switcher.feed(key('3'))).toEqual({ type: 'selectionChanged', index: 2 })
-    expect(switcher.feed(key('Enter'))).toEqual({ type: 'activate', index: 2 })
-  })
-
-  it('複数桁の数字で選択できる', () => {
-    const switcher = createTabSwitcher(12, 0)
-    expect(switcher.feed(key('1'))).toEqual({ type: 'selectionChanged', index: 0 })
-    expect(switcher.feed(key('2'))).toEqual({ type: 'selectionChanged', index: 11 })
-  })
-
-  it('桁バッファはj/kでリセットされる', () => {
-    const switcher = createTabSwitcher(12, 0)
-    switcher.feed(key('1'))
-    switcher.feed(key('j'))
-    expect(switcher.feed(key('2'))).toEqual({ type: 'selectionChanged', index: 1 })
-  })
-
-  it('範囲外の数字は単独桁として再解釈し、それも無効ならnoneを返す', () => {
-    const switcher = createTabSwitcher(3, 0)
-    expect(switcher.feed(key('2'))).toEqual({ type: 'selectionChanged', index: 1 })
-    expect(switcher.feed(key('9'))).toEqual({ type: 'none' })
-    expect(switcher.feed(key('3'))).toEqual({ type: 'selectionChanged', index: 2 })
-  })
-
-  it('x/n/Escapeが対応するイベントを返す', () => {
-    const switcher = createTabSwitcher(3, 1)
-    expect(switcher.feed(key('x'))).toEqual({ type: 'closeTab', index: 1 })
-    expect(switcher.feed(key('n'))).toEqual({ type: 'newTab' })
-    expect(switcher.feed(key('Escape'))).toEqual({ type: 'dismiss' })
-  })
-
-  it('修飾キー付きの入力は無視する', () => {
-    const switcher = createTabSwitcher(3, 0)
-    expect(switcher.feed({ ...key('j'), meta: true })).toEqual({ type: 'none' })
+  it('アクティブが見つからなければ0を返す', () => {
+    expect(activeTabIndex([{ id: 1, title: 'a', url: 'https://a.test', active: false }])).toBe(0)
   })
 })
