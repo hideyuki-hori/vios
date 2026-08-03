@@ -1,6 +1,6 @@
-import { isUnlockCommand } from './core'
-import { unlockDomain } from './blocking'
-import { byId, inputById } from './dom'
+import { isUnlockCommand } from '../../lib/block.core'
+import { unlockDomain } from '../../lib/block.gateway'
+import { byId, inputById } from '../../lib/dom'
 
 const params = new URLSearchParams(location.search)
 const domain = params.get('domain') ?? ''

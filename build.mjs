@@ -7,17 +7,32 @@ const watch = process.argv.includes('--watch')
 const devServerPort = 35729
 
 const options = {
-  entryPoints: ['src/content.ts', 'src/background.ts', 'src/options.ts', 'src/blocked.ts'],
+  entryPoints: [
+    'src/entrypoints/content/index.ts',
+    'src/entrypoints/background/index.ts',
+    'src/entrypoints/options/index.ts',
+    'src/entrypoints/blocked/index.ts',
+  ],
   bundle: true,
   format: 'iife',
   outdir: 'dist',
+  entryNames: '[dir]',
   target: 'chrome120',
   logLevel: 'info',
   define: { __DEV__: watch ? 'true' : 'false' },
   loader: { '.css': 'text' },
 }
 
-await cp('public', 'dist', { recursive: true })
+const htmlPages = ['options', 'blocked']
+
+async function copyStatic() {
+  await cp('public', 'dist', { recursive: true })
+  for (const name of htmlPages) {
+    await cp(`src/entrypoints/${name}/index.html`, `dist/${name}.html`)
+  }
+}
+
+await copyStatic()
 
 if (watch) {
   let version = 0
@@ -60,12 +75,19 @@ if (watch) {
     },
   }
 
-  watchDir('public', { recursive: true }, () => {
-    void cp('public', 'dist', { recursive: true }).then(() => {
-      version += 1
-      pendingTabReload = true
+  function watchStatic(path) {
+    watchDir(path, { recursive: true }, () => {
+      void copyStatic().then(() => {
+        version += 1
+        pendingTabReload = true
+      })
     })
-  })
+  }
+
+  watchStatic('public')
+  for (const name of htmlPages) {
+    watchStatic(`src/entrypoints/${name}/index.html`)
+  }
 
   const ctx = await context({ ...options, plugins: [notifyPlugin] })
   await ctx.watch()

@@ -1,4 +1,4 @@
-import type { TabSummary } from './core'
+import type { TabSummary } from './tabs.core'
 
 export async function listTabs(windowId?: number): Promise<TabSummary[]> {
   const tabs = await chrome.tabs.query(

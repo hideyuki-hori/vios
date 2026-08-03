@@ -5,7 +5,7 @@ import {
   isUnlocked,
   matchesDomain,
   normalizeDomain,
-} from './block'
+} from './block.core'
 
 describe('normalizeDomain', () => {
   it('素のドメインを受け付ける', () => {

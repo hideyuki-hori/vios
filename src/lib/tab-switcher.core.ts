@@ -1,4 +1,4 @@
-import type { Key } from './key'
+import type { Key } from './keys.core'
 
 export type TabSwitcherEvent =
   | { type: 'selectionChanged'; index: number }

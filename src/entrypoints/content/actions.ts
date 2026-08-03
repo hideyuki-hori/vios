@@ -1,9 +1,9 @@
-import type { Action } from './core'
-import { openBookmarkPalette } from './bookmark-ui'
-import { openHints } from './hint-ui'
-import { requestCloseCurrentTab } from './messaging'
-import { createScroller } from './scroller'
-import { openTabSwitcher } from './tab-switcher-ui'
+import { openBookmarkPalette } from '../../lib/bookmarks.view'
+import { openHints } from '../../lib/hint.view'
+import type { Action } from '../../lib/keybinds.core'
+import { createScroller } from '../../lib/scroll.driver'
+import { openTabSwitcher } from '../../lib/tab-switcher.view'
+import { requestCloseCurrentTab } from '../../lib/tabs.client'
 
 const scrollStep = 64
 const pageOverlapPx = 48

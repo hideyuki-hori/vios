@@ -1,5 +1,5 @@
-import { activeBlockedDomains, matchesDomain } from './core'
-import { loadBlockState, saveBlockState } from './block-storage'
+import { activeBlockedDomains, matchesDomain } from './block.core'
+import { loadBlockState, saveBlockState } from './block.storage'
 
 const unlockDurationMs = 60 * 60 * 1000
 

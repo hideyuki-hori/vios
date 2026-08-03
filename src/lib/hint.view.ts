@@ -1,6 +1,6 @@
-import { createHintSession, generateHintLabels, type HintSession } from './core'
+import { createHintSession, generateHintLabels, type HintSession } from './hint.core'
 import hintCss from './hint.css'
-import { toKey } from './keyboard'
+import { toKey } from './keys.to-key'
 
 const clickableSelector = [
   'a[href]',

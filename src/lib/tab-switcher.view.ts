@@ -1,12 +1,14 @@
-import {
-  type BookmarkNavigator,
-  type BookmarkSummary,
-  createBookmarkNavigator,
-  filterByQuery,
-} from './core'
-import { toKey } from './keyboard'
-import { requestCreateTab, requestListBookmarks } from './messaging'
+import { toKey } from './keys.to-key'
+import { filterByQuery } from './palette.core'
 import paletteCss from './palette.css'
+import { createTabSwitcher, type TabSwitcher } from './tab-switcher.core'
+import {
+  requestActivateTab,
+  requestCloseTab,
+  requestCreateTab,
+  requestListTabs,
+} from './tabs.client'
+import type { TabSummary } from './tabs.core'
 
 type OpenState = {
   host: HTMLDivElement
@@ -14,30 +16,22 @@ type OpenState = {
   input: HTMLInputElement
   listEl: HTMLUListElement
   rows: HTMLLIElement[]
-  all: BookmarkSummary[]
-  filtered: BookmarkSummary[]
-  navigator: BookmarkNavigator | null
+  allTabs: TabSummary[]
+  filtered: TabSummary[]
+  switcher: TabSwitcher | null
 }
 
 let state: OpenState | null = null
 
-export function isBookmarkPaletteOpen(): boolean {
+export function isTabSwitcherOpen(): boolean {
   return state !== null
 }
 
-function closePalette(): void {
+function closeSwitcher(): void {
   if (!state) return
   state.host.remove()
-  window.removeEventListener('blur', closePalette)
+  window.removeEventListener('blur', closeSwitcher)
   state = null
-}
-
-function openBookmark(bookmark: BookmarkSummary, newTab: boolean): void {
-  if (newTab) {
-    void requestCreateTab(bookmark.url)
-    return
-  }
-  location.assign(bookmark.url)
 }
 
 function updateSelection(index: number): void {
@@ -51,7 +45,7 @@ function updateSelection(index: number): void {
 function buildRows(): void {
   if (!state) return
   state.listEl.textContent = ''
-  state.rows = state.filtered.map((bookmark, index) => {
+  state.rows = state.filtered.map((tab, index) => {
     const row = document.createElement('li')
     row.className = 'row'
     const num = document.createElement('span')
@@ -61,10 +55,10 @@ function buildRows(): void {
     texts.className = 'texts'
     const title = document.createElement('div')
     title.className = 'title'
-    title.textContent = bookmark.title === '' ? bookmark.url : bookmark.title
+    title.textContent = tab.title === '' ? tab.url : tab.title
     const url = document.createElement('div')
     url.className = 'url'
-    url.textContent = bookmark.path === '' ? bookmark.url : `${bookmark.path} · ${bookmark.url}`
+    url.textContent = tab.url
     texts.append(title, url)
     row.append(num, texts)
     state?.listEl.append(row)
@@ -73,29 +67,25 @@ function buildRows(): void {
   if (state.filtered.length === 0) {
     const empty = document.createElement('li')
     empty.className = 'empty'
-    empty.textContent = '該当するブックマークがありません'
+    empty.textContent = '該当するタブがありません'
     state.listEl.append(empty)
   }
 }
 
 function applyFilter(query: string, preferredIndex: number): void {
   if (!state) return
-  state.filtered = filterByQuery(
-    state.all,
-    query,
-    (bookmark) => `${bookmark.title} ${bookmark.url} ${bookmark.path}`,
-  )
+  state.filtered = filterByQuery(state.allTabs, query, (tab) => `${tab.title} ${tab.url}`)
   buildRows()
   if (state.filtered.length === 0) {
-    state.navigator = null
+    state.switcher = null
     return
   }
   const initial = Math.min(preferredIndex, state.filtered.length - 1)
-  state.navigator = createBookmarkNavigator(state.filtered.length, initial)
-  updateSelection(state.navigator.selectedIndex())
+  state.switcher = createTabSwitcher(state.filtered.length, initial)
+  updateSelection(state.switcher.selectedIndex())
 }
 
-function mount(bookmarks: BookmarkSummary[]): void {
+function mount(tabs: TabSummary[], selectedIndex: number): void {
   const host = document.createElement('div')
   const shadow = host.attachShadow({ mode: 'open' })
   const style = document.createElement('style')
@@ -122,19 +112,40 @@ function mount(bookmarks: BookmarkSummary[]): void {
     input,
     listEl,
     rows: [],
-    all: bookmarks,
+    allTabs: tabs,
     filtered: [],
-    navigator: null,
+    switcher: null,
   }
-  applyFilter('', 0)
-  window.addEventListener('blur', closePalette)
+  applyFilter('', selectedIndex)
+  window.addEventListener('blur', closeSwitcher)
 }
 
-export async function openBookmarkPalette(): Promise<void> {
+export async function openTabSwitcher(): Promise<void> {
   if (state) return
-  const bookmarks = await requestListBookmarks()
-  if (bookmarks.length === 0) return
-  mount(bookmarks)
+  const tabs = await requestListTabs()
+  if (tabs.length === 0) return
+  const activeIndex = Math.max(
+    tabs.findIndex((tab) => tab.active),
+    0,
+  )
+  mount(tabs, activeIndex)
+}
+
+async function refreshTabs(preferredIndex: number): Promise<void> {
+  if (!state) return
+  const tabs = await requestListTabs()
+  if (!state) return
+  if (tabs.length === 0) {
+    closeSwitcher()
+    return
+  }
+  state.allTabs = tabs
+  applyFilter(state.input.value, preferredIndex)
+}
+
+async function closeTabAndRefresh(tabId: number, previousIndex: number): Promise<void> {
+  await requestCloseTab(tabId)
+  await refreshTabs(previousIndex)
 }
 
 function isSearchFocused(): boolean {
@@ -149,9 +160,9 @@ function handleSearchModeKey(event: KeyboardEvent): void {
       event.stopPropagation()
       if (state.filtered.length === 0) return
       if (state.filtered.length === 1) {
-        const bookmark = state.filtered[0]
-        closePalette()
-        if (bookmark) openBookmark(bookmark, event.shiftKey)
+        const tab = state.filtered[0]
+        closeSwitcher()
+        if (tab) void requestActivateTab(tab.id)
         return
       }
       state.input.blur()
@@ -169,8 +180,8 @@ function handleSearchModeKey(event: KeyboardEvent): void {
     case 'ArrowUp': {
       event.preventDefault()
       event.stopPropagation()
-      if (!state.navigator) return
-      const result = state.navigator.feed(toKey(event))
+      if (!state.switcher) return
+      const result = state.switcher.feed(toKey(event))
       if (result.type === 'selectionChanged') updateSelection(result.index)
       return
     }
@@ -179,7 +190,7 @@ function handleSearchModeKey(event: KeyboardEvent): void {
   }
 }
 
-export function handleBookmarkKeydown(event: KeyboardEvent): void {
+export function handleTabSwitcherKeydown(event: KeyboardEvent): void {
   if (!state) return
   if (event.isComposing) return
   if (isSearchFocused()) {
@@ -192,23 +203,32 @@ export function handleBookmarkKeydown(event: KeyboardEvent): void {
     state.input.focus()
     return
   }
-  if (!state.navigator) {
-    if (event.key === 'Escape') closePalette()
+  if (!state.switcher) {
+    if (event.key === 'Escape') closeSwitcher()
     return
   }
-  const result = state.navigator.feed(toKey(event))
+  const result = state.switcher.feed(toKey(event))
   switch (result.type) {
     case 'selectionChanged':
       updateSelection(result.index)
       return
-    case 'open': {
-      const bookmark = state.filtered[result.index]
-      closePalette()
-      if (bookmark) openBookmark(bookmark, result.newTab)
+    case 'activate': {
+      const tab = state.filtered[result.index]
+      closeSwitcher()
+      if (tab) void requestActivateTab(tab.id)
       return
     }
+    case 'closeTab': {
+      const tab = state.filtered[result.index]
+      if (tab) void closeTabAndRefresh(tab.id, result.index)
+      return
+    }
+    case 'newTab':
+      closeSwitcher()
+      void requestCreateTab()
+      return
     case 'dismiss':
-      closePalette()
+      closeSwitcher()
       return
     case 'none':
       return

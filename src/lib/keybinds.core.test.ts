@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { key } from './key'
-import { defaultKeybinds } from './keybind'
-import { createKeybindMatcher } from './keybind-matcher'
+import { createKeybindMatcher, defaultKeybinds } from './keybinds.core'
+import { key } from './keys.core'
 
 describe('createKeybindMatcher', () => {
   it('単打のキーがアクションにマッチする', () => {

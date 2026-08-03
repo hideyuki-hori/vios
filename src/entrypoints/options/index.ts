@@ -1,7 +1,7 @@
-import { normalizeDomain } from './core'
-import { loadBlockState, saveBlockState } from './block-storage'
-import { findOpenTabs, reblockAlarmPrefix, syncBlockRules } from './blocking'
-import { byId, inputById } from './dom'
+import { normalizeDomain } from '../../lib/block.core'
+import { findOpenTabs, reblockAlarmPrefix, syncBlockRules } from '../../lib/block.gateway'
+import { loadBlockState, saveBlockState } from '../../lib/block.storage'
+import { byId, inputById } from '../../lib/dom'
 
 const inputEl = inputById('input')
 const errorEl = byId('error')

@@ -1,4 +1,4 @@
-import type { BlockState } from './core'
+import type { BlockState } from './block.core'
 
 const storageKey = 'blockState'
 

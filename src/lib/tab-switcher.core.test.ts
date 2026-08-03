@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { key } from './key'
-import { createTabSwitcher } from './tab-switcher'
+import { key } from './keys.core'
+import { createTabSwitcher } from './tab-switcher.core'
 
 describe('createTabSwitcher', () => {
   it('j/kで選択が移動し、端でクランプされる', () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { filterByQuery } from './filter'
+import { filterByQuery } from './palette.core'
 
 type Item = {
   title: string

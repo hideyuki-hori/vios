@@ -1,4 +1,4 @@
-import type { BookmarkSummary } from './core'
+import type { BookmarkSummary } from './bookmarks.core'
 
 export async function listBookmarks(): Promise<BookmarkSummary[]> {
   const roots = await chrome.bookmarks.getTree()

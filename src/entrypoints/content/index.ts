@@ -1,9 +1,9 @@
-import { createKeybindMatcher, defaultKeybinds } from './core'
+import { handleBookmarkKeydown, isBookmarkPaletteOpen } from '../../lib/bookmarks.view'
+import { handleHintKeydown, isHintModeActive } from '../../lib/hint.view'
+import { createKeybindMatcher, defaultKeybinds } from '../../lib/keybinds.core'
+import { shouldIgnore, toKey } from '../../lib/keys.to-key'
+import { handleTabSwitcherKeydown, isTabSwitcherOpen } from '../../lib/tab-switcher.view'
 import { performAction, releaseAction } from './actions'
-import { handleBookmarkKeydown, isBookmarkPaletteOpen } from './bookmark-ui'
-import { handleHintKeydown, isHintModeActive } from './hint-ui'
-import { shouldIgnore, toKey } from './keyboard'
-import { handleTabSwitcherKeydown, isTabSwitcherOpen } from './tab-switcher-ui'
 
 const sequenceTimeoutMs = 1000
 

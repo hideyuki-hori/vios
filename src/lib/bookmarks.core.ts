@@ -1,4 +1,13 @@
-import type { Key } from './key'
+import type { Key } from './keys.core'
+
+export type BookmarkSummary = {
+  id: string
+  title: string
+  url: string
+  path: string
+}
+
+export type BookmarkRequest = { type: 'listBookmarks' }
 
 export type BookmarkNavigatorEvent =
   | { type: 'selectionChanged'; index: number }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { createBookmarkNavigator } from './bookmark-navigator'
-import { key } from './key'
+import { createBookmarkNavigator } from './bookmarks.core'
+import { key } from './keys.core'
 
 describe('createBookmarkNavigator', () => {
   it('j/kで選択が移動し、端でクランプされる', () => {

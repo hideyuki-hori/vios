@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { createHintSession, generateHintLabels } from './hint'
-import { key } from './key'
+import { createHintSession, generateHintLabels } from './hint.core'
+import { key } from './keys.core'
 
 describe('generateHintLabels', () => {
   it('0以下は空配列を返す', () => {

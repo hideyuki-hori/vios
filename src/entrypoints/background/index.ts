@@ -1,9 +1,13 @@
-import { extensionName } from './core'
-import { handleReblock, reblockAlarmPrefix, syncBlockRules } from './blocking'
-import { listBookmarks } from './bookmarks'
+import { handleReblock, reblockAlarmPrefix, syncBlockRules } from '../../lib/block.gateway'
+import type { BookmarkRequest } from '../../lib/bookmarks.core'
+import { listBookmarks } from '../../lib/bookmarks.gateway'
+import type { TabRequest } from '../../lib/tabs.core'
+import { activateTab, closeTab, createTab, listTabs } from '../../lib/tabs.gateway'
 import { startDevReload } from './dev-reload'
-import type { BackgroundRequest } from './messages'
-import { activateTab, closeTab, createTab, listTabs } from './tabs'
+
+const extensionName = 'vios'
+
+type BackgroundRequest = TabRequest | BookmarkRequest
 
 console.log(`[${extensionName}] background loaded`)
 

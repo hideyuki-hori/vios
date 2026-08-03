@@ -1,4 +1,4 @@
-import type { BookmarkSummary, TabSummary } from './core'
+import type { TabSummary } from './tabs.core'
 
 export function requestListTabs(): Promise<TabSummary[]> {
   return chrome.runtime.sendMessage({ type: 'listTabs' })
@@ -18,8 +18,4 @@ export function requestCloseCurrentTab(): Promise<void> {
 
 export function requestCreateTab(url?: string): Promise<void> {
   return chrome.runtime.sendMessage({ type: 'createTab', url })
-}
-
-export function requestListBookmarks(): Promise<BookmarkSummary[]> {
-  return chrome.runtime.sendMessage({ type: 'listBookmarks' })
 }
