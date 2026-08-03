@@ -1,4 +1,4 @@
-import type { Action } from '@vios/core'
+import type { Action } from './core'
 import { openBookmarkPalette } from './bookmark-ui'
 import { openHints } from './hint-ui'
 import { requestCloseCurrentTab } from './messaging'

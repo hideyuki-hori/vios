@@ -1,4 +1,4 @@
-import { createHintSession, generateHintLabels, type HintSession } from '@vios/core'
+import { createHintSession, generateHintLabels, type HintSession } from './core'
 import hintCss from './hint.css'
 import { toKey } from './keyboard'
 

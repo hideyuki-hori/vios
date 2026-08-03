@@ -3,7 +3,7 @@ import {
   type BookmarkSummary,
   createBookmarkNavigator,
   filterByQuery,
-} from '@vios/core'
+} from './core'
 import { toKey } from './keyboard'
 import { requestCreateTab, requestListBookmarks } from './messaging'
 import paletteCss from './palette.css'

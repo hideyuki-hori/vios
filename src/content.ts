@@ -1,4 +1,4 @@
-import { createKeybindMatcher, defaultKeybinds } from '@vios/core'
+import { createKeybindMatcher, defaultKeybinds } from './core'
 import { performAction, releaseAction } from './actions'
 import { handleBookmarkKeydown, isBookmarkPaletteOpen } from './bookmark-ui'
 import { handleHintKeydown, isHintModeActive } from './hint-ui'

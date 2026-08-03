@@ -1,4 +1,4 @@
-import { isUnlockCommand } from '@vios/core'
+import { isUnlockCommand } from './core'
 import { unlockDomain } from './blocking'
 import { byId, inputById } from './dom'
 

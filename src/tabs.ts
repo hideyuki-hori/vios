@@ -1,4 +1,4 @@
-import type { TabSummary } from '@vios/core'
+import type { TabSummary } from './core'
 
 export async function listTabs(windowId?: number): Promise<TabSummary[]> {
   const tabs = await chrome.tabs.query(

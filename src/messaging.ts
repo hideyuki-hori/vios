@@ -1,4 +1,4 @@
-import type { BookmarkSummary, TabSummary } from '@vios/core'
+import type { BookmarkSummary, TabSummary } from './core'
 
 export function requestListTabs(): Promise<TabSummary[]> {
   return chrome.runtime.sendMessage({ type: 'listTabs' })

@@ -1,4 +1,4 @@
-import { createTabSwitcher, filterByQuery, type TabSummary, type TabSwitcher } from '@vios/core'
+import { createTabSwitcher, filterByQuery, type TabSummary, type TabSwitcher } from './core'
 import { toKey } from './keyboard'
 import { requestActivateTab, requestCloseTab, requestCreateTab, requestListTabs } from './messaging'
 import paletteCss from './palette.css'

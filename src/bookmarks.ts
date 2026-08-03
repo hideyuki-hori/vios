@@ -1,4 +1,4 @@
-import type { BookmarkSummary } from '@vios/core'
+import type { BookmarkSummary } from './core'
 
 export async function listBookmarks(): Promise<BookmarkSummary[]> {
   const roots = await chrome.bookmarks.getTree()

@@ -1,4 +1,4 @@
-import { activeBlockedDomains, matchesDomain } from '@vios/core'
+import { activeBlockedDomains, matchesDomain } from './core'
 import { loadBlockState, saveBlockState } from './block-storage'
 
 const unlockDurationMs = 60 * 60 * 1000

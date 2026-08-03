@@ -1,4 +1,4 @@
-import type { BlockState } from '@vios/core'
+import type { BlockState } from './core'
 
 const storageKey = 'blockState'
 

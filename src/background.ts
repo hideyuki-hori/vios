@@ -1,4 +1,4 @@
-import { extensionName } from '@vios/core'
+import { extensionName } from './core'
 import { handleReblock, reblockAlarmPrefix, syncBlockRules } from './blocking'
 import { listBookmarks } from './bookmarks'
 import { startDevReload } from './dev-reload'

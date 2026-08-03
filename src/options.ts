@@ -1,4 +1,4 @@
-import { normalizeDomain } from '@vios/core'
+import { normalizeDomain } from './core'
 import { loadBlockState, saveBlockState } from './block-storage'
 import { findOpenTabs, reblockAlarmPrefix, syncBlockRules } from './blocking'
 import { byId, inputById } from './dom'

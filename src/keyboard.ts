@@ -1,4 +1,4 @@
-import type { Key } from '@vios/core'
+import type { Key } from './core'
 
 function isEditable(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false
