@@ -82,3 +82,22 @@ export function applyUnlock(
 export function clearUnlock(state: BlockState, domain: string): BlockState {
   return { ...state, unlocks: withoutUnlock(state.unlocks, domain) }
 }
+
+export type BlockRule = {
+  id: number
+  priority: number
+  action: { type: 'redirect'; redirect: { url: string } }
+  condition: { urlFilter: string; resourceTypes: ['main_frame'] }
+}
+
+export function buildBlockRules(
+  domains: string[],
+  redirectUrl: (domain: string) => string,
+): BlockRule[] {
+  return domains.map((domain, index) => ({
+    id: index + 1,
+    priority: 1,
+    action: { type: 'redirect', redirect: { url: redirectUrl(domain) } },
+    condition: { urlFilter: `||${domain}^`, resourceTypes: ['main_frame'] },
+  }))
+}

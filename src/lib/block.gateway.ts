@@ -1,4 +1,10 @@
-import { activeBlockedDomains, applyUnlock, clearUnlock, matchesDomain } from './block.core'
+import {
+  activeBlockedDomains,
+  applyUnlock,
+  buildBlockRules,
+  clearUnlock,
+  matchesDomain,
+} from './block.core'
 import { loadBlockState, saveBlockState } from './block.storage'
 
 export const reblockAlarmPrefix = 'reblock:'
@@ -13,18 +19,7 @@ export async function syncBlockRules(): Promise<void> {
   const existing = await chrome.declarativeNetRequest.getDynamicRules()
   await chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: existing.map((rule) => rule.id),
-    addRules: active.map((domain, index) => ({
-      id: index + 1,
-      priority: 1,
-      action: {
-        type: 'redirect',
-        redirect: { url: blockedPageUrl(domain) },
-      },
-      condition: {
-        urlFilter: `||${domain}^`,
-        resourceTypes: ['main_frame'],
-      },
-    })),
+    addRules: buildBlockRules(active, blockedPageUrl),
   })
 }
 

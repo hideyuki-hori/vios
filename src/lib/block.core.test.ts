@@ -3,6 +3,7 @@ import {
   activeBlockedDomains,
   addBlockedDomain,
   applyUnlock,
+  buildBlockRules,
   clearUnlock,
   isUnlockCommand,
   isUnlocked,
@@ -152,5 +153,26 @@ describe('clearUnlock', () => {
       domains: ['youtube.com', 'twitter.com'],
       unlocks: { 'twitter.com': 2000 },
     })
+  })
+})
+
+describe('buildBlockRules', () => {
+  it('ドメインごとに連番idのredirectルールを作る', () => {
+    expect(buildBlockRules(['youtube.com', 'twitter.com'], (domain) => `page?d=${domain}`)).toEqual(
+      [
+        {
+          id: 1,
+          priority: 1,
+          action: { type: 'redirect', redirect: { url: 'page?d=youtube.com' } },
+          condition: { urlFilter: '||youtube.com^', resourceTypes: ['main_frame'] },
+        },
+        {
+          id: 2,
+          priority: 1,
+          action: { type: 'redirect', redirect: { url: 'page?d=twitter.com' } },
+          condition: { urlFilter: '||twitter.com^', resourceTypes: ['main_frame'] },
+        },
+      ],
+    )
   })
 })
