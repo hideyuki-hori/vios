@@ -1,13 +1,4 @@
-const smoothingMs = 80
-const maxFrameMs = 64
-const externalScrollTolerancePx = 2
-const farJumpViewports = 3
-const holdDelayMs = 150
-const holdVelocityPxPerSec = 1000
-
-function clamp(value: number, min: number, max: number): number {
-  return Math.min(Math.max(value, min), max)
-}
+import { holdDelayMs, planScrollStart, stepScrollFrame } from './scroll.core'
 
 export function createScroller() {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -45,43 +36,53 @@ export function createScroller() {
 
   function frame(time: number): void {
     if (!animating) return
-    if (Math.abs(window.scrollY - expected) > externalScrollTolerancePx) {
-      animating = false
-      stopAllHolds()
-      return
-    }
-    const dt = Math.min(time - lastTime, maxFrameMs)
+    const result = stepScrollFrame({
+      target,
+      holdDirection,
+      dtMs: time - lastTime,
+      scrollY: window.scrollY,
+      expectedY: expected,
+      maxScroll: maxScroll(),
+    })
     lastTime = time
-    if (holdDirection !== 0) {
-      target = clamp(target + (holdVelocityPxPerSec * dt * holdDirection) / 1000, 0, maxScroll())
-    }
-    const delta = target - window.scrollY
-    if (Math.abs(delta) < 1) {
-      if (holdDirection === 0) {
-        window.scrollTo({ top: target, behavior: 'instant' })
+    target = result.target
+    switch (result.frame.type) {
+      case 'interrupted':
+        animating = false
+        stopAllHolds()
+        return
+      case 'settle':
+        window.scrollTo({ top: result.frame.y, behavior: 'instant' })
         animating = false
         return
-      }
-      requestAnimationFrame(frame)
-      return
+      case 'holdContinue':
+        requestAnimationFrame(frame)
+        return
+      case 'move':
+        window.scrollBy({ top: result.frame.by, behavior: 'instant' })
+        expected = window.scrollY
+        requestAnimationFrame(frame)
+        return
     }
-    const factor = 1 - Math.exp(-dt / smoothingMs)
-    window.scrollBy({ top: delta * factor, behavior: 'instant' })
-    expected = window.scrollY
-    requestAnimationFrame(frame)
   }
 
   function startToward(y: number): void {
-    target = clamp(y, 0, maxScroll())
-    if (reduceMotion.matches) {
-      window.scrollTo({ top: target, behavior: 'instant' })
+    const plan = planScrollStart({
+      toY: y,
+      scrollY: window.scrollY,
+      viewportHeight: window.innerHeight,
+      maxScroll: maxScroll(),
+      reduceMotion: reduceMotion.matches,
+    })
+    if (plan.type === 'instant') {
+      target = plan.y
+      window.scrollTo({ top: plan.y, behavior: 'instant' })
       animating = false
       return
     }
-    const delta = target - window.scrollY
-    const tail = window.innerHeight
-    if (Math.abs(delta) > tail * farJumpViewports) {
-      window.scrollTo({ top: target - Math.sign(delta) * tail, behavior: 'instant' })
+    target = plan.target
+    if (plan.teleportTo !== null) {
+      window.scrollTo({ top: plan.teleportTo, behavior: 'instant' })
     }
     expected = window.scrollY
     if (animating) return
