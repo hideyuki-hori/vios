@@ -43,6 +43,17 @@ export type KeybindMatcher = {
   reset: () => void
 }
 
+export function releasableActions(keybinds: Keybind[], releasedKey: string): Action[] {
+  return keybinds.flatMap((keybind) => {
+    const first = keybind.sequence[0]
+    return keybind.sequence.length === 1 &&
+      first !== undefined &&
+      first.key.toLowerCase() === releasedKey.toLowerCase()
+      ? [keybind.action]
+      : []
+  })
+}
+
 function sequenceEquals(a: Key[], b: Key[]): boolean {
   return (
     a.length === b.length &&

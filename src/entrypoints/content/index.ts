@@ -1,6 +1,6 @@
 import { handleBookmarkKeydown, isBookmarkPaletteOpen } from '../../lib/bookmarks.view'
 import { handleHintKeydown, isHintModeActive } from '../../lib/hint.view'
-import { createKeybindMatcher, defaultKeybinds } from '../../lib/keybinds.core'
+import { createKeybindMatcher, defaultKeybinds, releasableActions } from '../../lib/keybinds.core'
 import { shouldIgnore, toKey } from '../../lib/keys.to-key'
 import { handleTabSwitcherKeydown, isTabSwitcherOpen } from '../../lib/tab-switcher.view'
 import { performAction, releaseAction } from './actions'
@@ -57,15 +57,8 @@ window.addEventListener(
 window.addEventListener(
   'keyup',
   (event) => {
-    for (const keybind of defaultKeybinds) {
-      const first = keybind.sequence[0]
-      if (
-        keybind.sequence.length === 1 &&
-        first !== undefined &&
-        first.key.toLowerCase() === event.key.toLowerCase()
-      ) {
-        releaseAction(keybind.action)
-      }
+    for (const action of releasableActions(defaultKeybinds, event.key)) {
+      releaseAction(action)
     }
   },
   true,

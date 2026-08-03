@@ -1,6 +1,21 @@
 import { describe, expect, it } from 'vitest'
-import { createKeybindMatcher, defaultKeybinds } from './keybinds.core'
+import { createKeybindMatcher, defaultKeybinds, releasableActions } from './keybinds.core'
 import { key } from './keys.core'
+
+describe('releasableActions', () => {
+  it('離されたキーに一致する単キーバインドのアクションを返す', () => {
+    expect(releasableActions(defaultKeybinds, 'j')).toEqual(['scrollDown'])
+    expect(releasableActions(defaultKeybinds, 'Enter')).toEqual([])
+  })
+
+  it('大文字小文字を区別しない', () => {
+    expect(releasableActions(defaultKeybinds, 'J')).toEqual(['scrollDown'])
+  })
+
+  it('複数キーのシーケンスは対象にしない', () => {
+    expect(releasableActions(defaultKeybinds, 'g')).toEqual(['scrollToBottom'])
+  })
+})
 
 describe('createKeybindMatcher', () => {
   it('単打のキーがアクションにマッチする', () => {
