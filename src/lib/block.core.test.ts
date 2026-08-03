@@ -8,6 +8,7 @@ import {
   isUnlocked,
   matchesDomain,
   normalizeDomain,
+  parseBlockState,
   removeBlockedDomain,
   unlockDurationMs,
 } from './block.core'
@@ -78,6 +79,29 @@ describe('activeBlockedDomains', () => {
     }
     expect(activeBlockedDomains(state, 500)).toEqual(['twitter.com'])
     expect(activeBlockedDomains(state, 1500)).toEqual(['youtube.com', 'twitter.com'])
+  })
+})
+
+describe('parseBlockState', () => {
+  it('未保存や壊れた値は空のstateにする', () => {
+    expect(parseBlockState(undefined)).toEqual({ domains: [], unlocks: {} })
+    expect(parseBlockState(null)).toEqual({ domains: [], unlocks: {} })
+    expect(parseBlockState('text')).toEqual({ domains: [], unlocks: {} })
+    expect(parseBlockState({})).toEqual({ domains: [], unlocks: {} })
+  })
+
+  it('正しい形はそのまま復元する', () => {
+    const state = { domains: ['youtube.com'], unlocks: { 'youtube.com': 1000 } }
+    expect(parseBlockState(state)).toEqual(state)
+  })
+
+  it('型の合わない要素だけを取り除く', () => {
+    expect(
+      parseBlockState({
+        domains: ['youtube.com', 1, null],
+        unlocks: { 'youtube.com': 1000, 'twitter.com': 'soon' },
+      }),
+    ).toEqual({ domains: ['youtube.com'], unlocks: { 'youtube.com': 1000 } })
   })
 })
 
