@@ -1,4 +1,4 @@
-import { holdDelayMs, planScrollStart, stepScrollFrame } from '~/lib/scroll.core'
+import { holdDelayMs, planScrollStart, stepScrollFrame } from './scroll.core'
 
 export function createScroller() {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')

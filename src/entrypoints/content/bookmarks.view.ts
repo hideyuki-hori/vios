@@ -1,11 +1,8 @@
-import { requestListBookmarks } from '~/lib/bookmarks.client'
-import {
-  type BookmarkSummary,
-  bookmarkPaletteConfig,
-  toBookmarkPaletteItems,
-} from '~/lib/bookmarks.core'
-import { createPaletteUi } from '~/lib/palette.view'
-import { requestCreateTab } from '~/lib/tabs.client'
+import type { BookmarkSummary } from '~/lib/bookmarks.core'
+import { requestListBookmarks } from './bookmarks.client'
+import { bookmarkPaletteConfig, toBookmarkPaletteItems } from './bookmarks.core'
+import { createPaletteUi } from './palette.view'
+import { requestCreateTab } from './tabs.client'
 
 let byId = new Map<string, BookmarkSummary>()
 

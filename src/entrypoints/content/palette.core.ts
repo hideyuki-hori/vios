@@ -1,4 +1,4 @@
-import type { Key } from '~/lib/keys.core'
+import type { Key } from './keys.core'
 
 export function filterByQuery<T>(items: T[], query: string, text: (item: T) => string): T[] {
   const terms = query

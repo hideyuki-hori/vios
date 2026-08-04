@@ -1,9 +1,9 @@
-import { startDevReload } from '~/entrypoints/background/dev-reload'
 import { handleReblock, reblockAlarmPrefix, syncBlockRules } from '~/lib/block.gateway'
 import type { BookmarkRequest } from '~/lib/bookmarks.core'
-import { listBookmarks } from '~/lib/bookmarks.gateway'
 import type { TabRequest } from '~/lib/tabs.core'
-import { activateTab, closeTab, createTab, listTabs } from '~/lib/tabs.gateway'
+import { listBookmarks } from './bookmarks.gateway'
+import { startDevReload } from './dev-reload'
+import { activateTab, closeTab, createTab, listTabs } from './tabs.gateway'
 
 const extensionName = 'vios'
 

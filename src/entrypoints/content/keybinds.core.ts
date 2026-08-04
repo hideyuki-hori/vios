@@ -1,4 +1,4 @@
-import { type Key, key, keysEqual } from '~/lib/keys.core'
+import { type Key, key, keysEqual } from './keys.core'
 
 export type Action =
   | 'scrollDown'

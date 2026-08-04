@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { flattenBookmarkTree, toBookmarkPaletteItems } from '~/lib/bookmarks.core'
+import { flattenBookmarkTree } from '~/lib/bookmarks.core'
 
 describe('flattenBookmarkTree', () => {
   it('フォルダ階層をパスにしてurlノードだけを集める', () => {
@@ -36,29 +36,5 @@ describe('flattenBookmarkTree', () => {
 
   it('子のないフォルダと空タイトルのルートを無視する', () => {
     expect(flattenBookmarkTree([{ id: '0', title: '', children: [] }])).toEqual([])
-  })
-})
-
-describe('toBookmarkPaletteItems', () => {
-  it('ブックマークをPaletteItemに整形する', () => {
-    expect(
-      toBookmarkPaletteItems([
-        { id: 'a', title: 'MDN', url: 'https://developer.mozilla.org', path: 'dev/docs' },
-        { id: 'b', title: '', url: 'https://example.com', path: '' },
-      ]),
-    ).toEqual([
-      {
-        id: 'a',
-        primary: 'MDN',
-        secondary: 'dev/docs · https://developer.mozilla.org',
-        searchText: 'MDN https://developer.mozilla.org dev/docs',
-      },
-      {
-        id: 'b',
-        primary: 'https://example.com',
-        secondary: 'https://example.com',
-        searchText: ' https://example.com ',
-      },
-    ])
   })
 })

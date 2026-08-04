@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { createKeybindMatcher, defaultKeybinds, releasableActions } from '~/lib/keybinds.core'
-import { key } from '~/lib/keys.core'
+import { createKeybindMatcher, defaultKeybinds, releasableActions } from './keybinds.core'
+import { key } from './keys.core'
 
 describe('releasableActions', () => {
   it('離されたキーに一致する単キーバインドのアクションを返す', () => {

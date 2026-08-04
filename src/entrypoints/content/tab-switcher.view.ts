@@ -1,11 +1,11 @@
-import { createPaletteUi } from '~/lib/palette.view'
+import { createPaletteUi } from './palette.view'
 import {
   activeTabIndex,
   type TabCommand,
   tabPaletteConfig,
   toTabPaletteItems,
-} from '~/lib/tab-switcher.core'
-import { requestActivateTab, requestCloseTab, requestListTabs } from '~/lib/tabs.client'
+} from './tab-switcher.core'
+import { requestActivateTab, requestCloseTab, requestListTabs } from './tabs.client'
 
 const ui = createPaletteUi<TabCommand>(tabPaletteConfig, {
   onCommit(id) {

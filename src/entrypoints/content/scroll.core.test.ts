@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { planScrollStart, stepScrollFrame } from '~/lib/scroll.core'
+import { planScrollStart, stepScrollFrame } from './scroll.core'
 
 describe('planScrollStart', () => {
   it('目標を0とmaxScrollの範囲にクランプする', () => {
