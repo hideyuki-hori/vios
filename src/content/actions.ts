@@ -1,6 +1,7 @@
 import { openBookmarkPalette } from './bookmarks.view'
 import { openHints } from './hint.view'
 import type { Action } from './keybinds.core'
+import { openOmnibar } from './omnibar.view'
 import { createScroller } from './scroll.driver'
 import { openTabSwitcher } from './tab-switcher.view'
 import { requestCloseCurrentTab, requestCreateTab } from './tabs.client'
@@ -44,6 +45,9 @@ const performers: Record<Action, (repeat: boolean) => void> = {
   },
   openNewTab() {
     void requestCreateTab()
+  },
+  openOmnibar() {
+    void openOmnibar()
   },
   closeCurrentTab() {
     void requestCloseCurrentTab()

@@ -3,7 +3,7 @@
   "name": "vios",
   "version": "0.1.0",
   "description": "Vim-like keyboard navigation and utilities",
-  "permissions": ["tabs", "bookmarks", "storage", "alarms", "declarativeNetRequest"],
+  "permissions": ["tabs", "bookmarks", "history", "storage", "alarms", "declarativeNetRequest"],
   "host_permissions": ["<all_urls>"],
   "action": {},
   "options_ui": {

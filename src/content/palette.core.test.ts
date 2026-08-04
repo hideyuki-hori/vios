@@ -202,3 +202,33 @@ describe('createPalette', () => {
     expect(palette.view().rows).toHaveLength(3)
   })
 })
+
+describe('createPalette (searchPrimary)', () => {
+  const primaryConfig: PaletteConfig<never> = {
+    commands: [],
+    emptyMessage: '該当なし',
+    searchPrimary: true,
+  }
+
+  it('最初から検索モードで開く', () => {
+    const palette = createPalette(numberedItems(3), primaryConfig)
+    expect(palette.view().searchFocused).toBe(true)
+  })
+
+  it('Enterは候補数によらず選択中をcommitする', () => {
+    const palette = createPalette(numberedItems(3), primaryConfig)
+    palette.feed(key('ArrowDown'))
+    expect(palette.feed(key('Enter'))).toEqual({ type: 'commit', id: 'id2', alt: false })
+    expect(palette.feed({ ...key('Enter'), shift: true })).toEqual({
+      type: 'commit',
+      id: 'id2',
+      alt: true,
+    })
+  })
+
+  it('候補0件のEnterはnone、Escapeは即dismiss', () => {
+    const palette = createPalette([], primaryConfig)
+    expect(palette.feed(key('Enter'))).toEqual({ type: 'none' })
+    expect(palette.feed(key('Escape'))).toEqual({ type: 'dismiss' })
+  })
+})

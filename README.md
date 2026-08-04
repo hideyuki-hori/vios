@@ -16,6 +16,7 @@ A Chrome extension for Vim-like keyboard navigation and utilities.
 | `f` | Hint mode (labels links and buttons, type to open) |
 | `t` | Open a new tab |
 | `T` | Open the tab switcher |
+| `o` | Open the omnibar (tabs / bookmarks / history / URL / search) |
 | `b` | Open the bookmark palette |
 | `x` | Close the current tab |
 | `Esc` | Dismiss modals and hints |
@@ -28,6 +29,13 @@ Keybindings are disabled while an input, textarea, or contenteditable element is
 - Type a number to jump by index (multi-digit supported)
 - `/` for incremental search (`Enter` switches immediately when narrowed to one)
 - `x` closes the selected tab
+
+### Omnibar (`o`)
+
+- Type to see suggestions from open tabs, bookmarks, and history
+- The first row opens the raw input: URLs are opened directly, anything else becomes a Google search
+- Arrow keys to select, `Enter` opens in the current tab, `Shift+Enter` in a new tab
+- Selecting an open tab switches to it
 
 ### Bookmark palette (`b`)
 

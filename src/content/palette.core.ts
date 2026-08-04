@@ -44,6 +44,7 @@ export type PaletteEvent<Command extends string> =
 export type PaletteConfig<Command extends string> = {
   commands: { key: string; command: Command }[]
   emptyMessage: string
+  searchPrimary?: boolean
 }
 
 export type Palette<Command extends string> = {
@@ -68,7 +69,7 @@ export function createPalette<Command extends string>(
   let query = ''
   let filtered = all
   let selected = clampIndex(initialIndex, filtered.length)
-  let searchFocused = false
+  let searchFocused = config.searchPrimary === true
   let digits = ''
 
   function refilter(preferredIndex: number): void {
@@ -107,12 +108,14 @@ export function createPalette<Command extends string>(
   function feedSearchMode(input: Key): PaletteEvent<Command> {
     switch (input.key) {
       case 'Enter': {
+        if (config.searchPrimary === true) return commitSelected(input.shift)
         if (filtered.length === 0) return { type: 'none' }
         if (filtered.length === 1) return commitSelected(input.shift)
         searchFocused = false
         return { type: 'viewChanged' }
       }
       case 'Escape': {
+        if (config.searchPrimary === true) return { type: 'dismiss' }
         query = ''
         refilter(0)
         searchFocused = false

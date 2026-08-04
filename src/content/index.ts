@@ -3,6 +3,7 @@ import { handleBookmarkKeydown, isBookmarkPaletteOpen } from './bookmarks.view'
 import { handleHintKeydown, isHintModeActive } from './hint.view'
 import { createKeybindMatcher, defaultKeybinds, releasableActions } from './keybinds.core'
 import { shouldIgnore, toKey } from './keys.to-key'
+import { handleOmnibarKeydown, isOmnibarOpen } from './omnibar.view'
 import { handleTabSwitcherKeydown, isTabSwitcherOpen } from './tab-switcher.view'
 
 const sequenceTimeoutMs = 1000
@@ -20,6 +21,10 @@ function clearPendingTimer(): void {
 window.addEventListener(
   'keydown',
   (event) => {
+    if (isOmnibarOpen()) {
+      handleOmnibarKeydown(event)
+      return
+    }
     if (isTabSwitcherOpen()) {
       handleTabSwitcherKeydown(event)
       return

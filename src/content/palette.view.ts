@@ -14,6 +14,7 @@ const searchModeKeys = new Set(['Enter', 'Escape', 'ArrowDown', 'ArrowUp'])
 type PaletteCallbacks<Command extends string> = {
   onCommit: (id: string, alt: boolean) => void
   onCommand?: (command: Command, id: string) => void
+  onQueryChange?: (query: string) => void
 }
 
 type OpenState<Command extends string> = {
@@ -93,7 +94,9 @@ export function createPaletteUi<Command extends string>(
       row.classList.toggle('selected', index === view.selectedIndex)
     })
     state.rows[view.selectedIndex]?.scrollIntoView({ block: 'nearest' })
-    if (state.input.value !== view.query) state.input.value = view.query
+    if (!callbacks.onQueryChange && state.input.value !== view.query) {
+      state.input.value = view.query
+    }
     const focused = state.shadow.activeElement === state.input
     if (view.searchFocused && !focused) state.input.focus()
     if (!view.searchFocused && focused) state.input.blur()
@@ -135,6 +138,10 @@ export function createPaletteUi<Command extends string>(
       event.stopPropagation()
     })
     input.addEventListener('input', () => {
+      if (callbacks.onQueryChange) {
+        callbacks.onQueryChange(input.value)
+        return
+      }
       machine.setQuery(input.value)
       render()
     })
