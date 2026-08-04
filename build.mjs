@@ -8,10 +8,10 @@ const devServerPort = 35729
 
 const options = {
   entryPoints: [
-    'src/entrypoints/content/index.ts',
-    'src/entrypoints/background/index.ts',
-    'src/entrypoints/options/index.ts',
-    'src/entrypoints/blocked/index.ts',
+    'src/content/index.ts',
+    'src/background/index.ts',
+    'src/options/index.ts',
+    'src/blocked/index.ts',
   ],
   bundle: true,
   format: 'iife',
@@ -28,7 +28,7 @@ const htmlPages = ['options', 'blocked']
 async function copyStatic() {
   await cp('public', 'dist', { recursive: true })
   for (const name of htmlPages) {
-    await cp(`src/entrypoints/${name}/index.html`, `dist/${name}.html`)
+    await cp(`src/${name}/index.html`, `dist/${name}.html`)
   }
 }
 
@@ -86,7 +86,7 @@ if (watch) {
 
   watchStatic('public')
   for (const name of htmlPages) {
-    watchStatic(`src/entrypoints/${name}/index.html`)
+    watchStatic(`src/${name}/index.html`)
   }
 
   const ctx = await context({ ...options, plugins: [notifyPlugin] })

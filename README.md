@@ -68,9 +68,11 @@ While `pnpm dev` is running, saving a file automatically reloads the extension a
 
 ```
 src/
-  entrypoints/  One directory per bundle (content / background / options / blocked);
-                index.ts is the composition root, implementation lives beside it
-  lib/          Only code shared by two or more entrypoints
+  content/     One directory per bundle; index.ts is the composition root,
+  background/  implementation lives beside it
+  options/
+  blocked/
+  lib/         Only code shared by two or more bundles
 ```
 
 Pure logic lives in files named `*.core.ts`, which `tsconfig.pure.json` type-checks against the ES2022 lib alone (no DOM or chrome types), and all of it is covered by vitest.
