@@ -10,6 +10,7 @@ export type Action =
   | 'historyBack'
   | 'historyForward'
   | 'openTabSwitcher'
+  | 'openNewTab'
   | 'closeCurrentTab'
   | 'reloadPage'
   | 'enterHintMode'
@@ -29,7 +30,8 @@ export const defaultKeybinds: Keybind[] = [
   { sequence: [key('l')], action: 'historyForward' },
   { sequence: [key('g'), key('g')], action: 'scrollToTop' },
   { sequence: [key('G')], action: 'scrollToBottom' },
-  { sequence: [key('t')], action: 'openTabSwitcher' },
+  { sequence: [key('t')], action: 'openNewTab' },
+  { sequence: [key('T')], action: 'openTabSwitcher' },
   { sequence: [key('x')], action: 'closeCurrentTab' },
   { sequence: [key('r')], action: 'reloadPage' },
   { sequence: [key('f')], action: 'enterHintMode' },

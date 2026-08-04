@@ -14,19 +14,20 @@ A Chrome extension for Vim-like keyboard navigation and utilities.
 | `h` / `l` | Go back / forward in history |
 | `r` | Reload the page |
 | `f` | Hint mode (labels links and buttons, type to open) |
-| `t` | Open the tab switcher |
+| `t` | Open a new tab |
+| `T` | Open the tab switcher |
 | `b` | Open the bookmark palette |
 | `x` | Close the current tab |
 | `Esc` | Dismiss modals and hints |
 
 Keybindings are disabled while an input, textarea, or contenteditable element is focused, and during IME composition.
 
-### Tab switcher (`t`)
+### Tab switcher (`T`)
 
 - `j` / `k` / arrow keys to select, `Enter` to switch
 - Type a number to jump by index (multi-digit supported)
 - `/` for incremental search (`Enter` switches immediately when narrowed to one)
-- `x` closes the selected tab, `n` opens a new tab
+- `x` closes the selected tab
 
 ### Bookmark palette (`b`)
 
@@ -50,7 +51,7 @@ pnpm build
 
 1. Open `chrome://extensions` in Chrome
 2. Enable Developer mode
-3. Click "Load unpacked" and select `packages/chrome/dist`
+3. Click "Load unpacked" and select `dist`
 
 ## Development
 
@@ -66,12 +67,12 @@ While `pnpm dev` is running, saving a file automatically reloads the extension a
 ## Structure
 
 ```
-packages/
-  core/    Pure domain logic (no DOM or chrome API dependencies)
-  chrome/  The extension itself (entrypoints, UI, chrome.* wrappers, manifest, build)
+src/
+  entrypoints/  Wiring only (content / background / options / blocked)
+  lib/          Implementation, flat; files grouped by name prefix
 ```
 
-`core` shuts out browser types via its tsconfig `lib` / `types` settings, and all of its logic is covered by vitest.
+Pure logic lives in files named `*.core.ts`, which `tsconfig.pure.json` type-checks against the ES2022 lib alone (no DOM or chrome types), and all of it is covered by vitest.
 
 ## License
 

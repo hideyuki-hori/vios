@@ -5,23 +5,13 @@ import {
   tabPaletteConfig,
   toTabPaletteItems,
 } from '~/lib/tab-switcher.core'
-import {
-  requestActivateTab,
-  requestCloseTab,
-  requestCreateTab,
-  requestListTabs,
-} from '~/lib/tabs.client'
+import { requestActivateTab, requestCloseTab, requestListTabs } from '~/lib/tabs.client'
 
 const ui = createPaletteUi<TabCommand>(tabPaletteConfig, {
   onCommit(id) {
     void requestActivateTab(Number(id))
   },
-  onCommand(command, id) {
-    if (command === 'newTab') {
-      ui.close()
-      void requestCreateTab()
-      return
-    }
+  onCommand(_, id) {
     void closeTabAndRefresh(Number(id))
   },
 })

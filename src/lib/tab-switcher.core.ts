@@ -1,13 +1,10 @@
 import type { PaletteConfig, PaletteItem } from '~/lib/palette.core'
 import type { TabSummary } from '~/lib/tabs.core'
 
-export type TabCommand = 'closeTab' | 'newTab'
+export type TabCommand = 'closeTab'
 
 export const tabPaletteConfig: PaletteConfig<TabCommand> = {
-  commands: [
-    { key: 'x', command: 'closeTab' },
-    { key: 'n', command: 'newTab' },
-  ],
+  commands: [{ key: 'x', command: 'closeTab' }],
   emptyMessage: '該当するタブがありません',
 }
 

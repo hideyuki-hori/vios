@@ -3,7 +3,7 @@ import { openHints } from '~/lib/hint.view'
 import type { Action } from '~/lib/keybinds.core'
 import { createScroller } from '~/lib/scroll.driver'
 import { openTabSwitcher } from '~/lib/tab-switcher.view'
-import { requestCloseCurrentTab } from '~/lib/tabs.client'
+import { requestCloseCurrentTab, requestCreateTab } from '~/lib/tabs.client'
 
 const scrollStep = 64
 const pageOverlapPx = 48
@@ -41,6 +41,9 @@ const performers: Record<Action, (repeat: boolean) => void> = {
   },
   openTabSwitcher() {
     void openTabSwitcher()
+  },
+  openNewTab() {
+    void requestCreateTab()
   },
   closeCurrentTab() {
     void requestCloseCurrentTab()

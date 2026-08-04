@@ -24,6 +24,8 @@ describe('createKeybindMatcher', () => {
     expect(matcher.feed(key('k'))).toEqual({ type: 'match', action: 'scrollUp' })
     expect(matcher.feed(key('h'))).toEqual({ type: 'match', action: 'historyBack' })
     expect(matcher.feed(key('l'))).toEqual({ type: 'match', action: 'historyForward' })
+    expect(matcher.feed(key('t'))).toEqual({ type: 'match', action: 'openNewTab' })
+    expect(matcher.feed(key('T'))).toEqual({ type: 'match', action: 'openTabSwitcher' })
   })
 
   it('ggの2打シーケンスがマッチする', () => {
