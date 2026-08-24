@@ -2,12 +2,23 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>vios 設定</title>
+<title>新しいタブ</title>
 <link rel="stylesheet" href="page.css">
 </head>
 <body>
 <main class="card">
 <h1>vios</h1>
+<section>
+<h2>キー</h2>
+<dl class="keys">
+<dt><code>o</code></dt><dd>オムニバー(タブ / ブックマーク / 履歴 / URL / 検索)</dd>
+<dt><code>b</code></dt><dd>ブックマーク</dd>
+<dt><code>T</code></dt><dd>タブ切替</dd>
+<dt><code>t</code> / <code>x</code></dt><dd>新規タブ / タブを閉じる</dd>
+<dt><code>m</code></dt><dd>付箋</dd>
+<dt><code>f</code></dt><dd>ヒント</dd>
+</dl>
+</section>
 <section>
 <h2>ブロックするサイト</h2>
 <p class="hint">ドメイン単位でブロックします(サブドメインを含む)。追加時に該当ドメインの開いているタブは閉じられます</p>
@@ -19,6 +30,7 @@
 <ul id="list" class="domain-list"></ul>
 </section>
 </main>
-<script src="options.js"></script>
+<script src="content.js"></script>
+<script src="newtab.js"></script>
 </body>
 </html>

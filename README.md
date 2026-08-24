@@ -45,7 +45,7 @@ Keybindings are disabled while an input, textarea, or contenteditable element is
 
 ### Site blocking
 
-- Click the vios toolbar icon to open the options page and register domains to block (subdomains included)
+- The new tab page is vios's own page: keybindings work there, and it hosts the settings (click the toolbar icon to open it as well). Register domains to block there (subdomains included)
 - When registering, open tabs on that domain are closed after a confirmation
 - On a blocked page, type `unlock <domain>` by hand (paste is disabled) to unlock for one hour
 - When the hour expires, the domain is blocked again and open tabs are redirected to the blocked page
@@ -78,7 +78,7 @@ While `pnpm dev` is running, saving a file automatically reloads the extension a
 src/
   content/     One directory per bundle; index.ts is the composition root,
   background/  implementation lives beside it
-  options/
+  newtab/
   blocked/
   lib/         Only code shared by two or more bundles
 ```

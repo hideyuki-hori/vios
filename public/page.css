@@ -34,6 +34,26 @@ h2 {
   font-size: 13px;
 }
 
+section + section {
+  margin-top: 20px;
+}
+
+.keys {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 14px;
+  margin: 8px 0 0;
+  font-size: 13px;
+}
+
+.keys dt {
+  color: #8b909a;
+}
+
+.keys dd {
+  margin: 0;
+}
+
 code {
   background: #16181d;
   border: 1px solid #383b44;

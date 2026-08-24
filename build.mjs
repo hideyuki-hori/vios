@@ -10,7 +10,7 @@ const options = {
   entryPoints: [
     'src/content/index.ts',
     'src/background/index.ts',
-    'src/options/index.ts',
+    'src/newtab/index.ts',
     'src/blocked/index.ts',
   ],
   bundle: true,
@@ -23,7 +23,7 @@ const options = {
   loader: { '.css': 'text' },
 }
 
-const htmlPages = ['options', 'blocked']
+const htmlPages = ['newtab', 'blocked']
 
 async function copyStatic() {
   await cp('public', 'dist', { recursive: true })
