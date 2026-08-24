@@ -1,6 +1,14 @@
-# vios
+# nimnom
 
 A Chrome extension for Vim-like keyboard navigation and utilities.
+
+## Name
+
+*nimnom* is a made-up word, chosen for its sound before its meaning.
+
+It follows the pattern of *tick-tock* and *zig-zag*: two beats, one vowel shifting. Almost everything this extension does comes in pairs — `j`/`k`, `h`/`l`, `d`/`u`, open/block — and the name moves the same way.
+
+If you want a meaning, *nim* is from *nimble*, and *nom* is the sound of something small being picked up and eaten. Nimble hands, one link at a time.
 
 ## Features
 
@@ -45,14 +53,14 @@ Keybindings are disabled while an input, textarea, or contenteditable element is
 
 ### Site blocking
 
-- The new tab page is vios's own page: keybindings work there, and it hosts the settings (click the toolbar icon to open it as well). Register domains to block there (subdomains included)
+- The new tab page is nimnom's own page: keybindings work there, and it hosts the settings (click the toolbar icon to open it as well). Register domains to block there (subdomains included)
 - When registering, open tabs on that domain are closed after a confirmation
 - On a blocked page, type `unlock <domain>` by hand (paste is disabled) to unlock for one hour
 - When the hour expires, the domain is blocked again and open tabs are redirected to the blocked page
 
-### Disabling vios per site
+### Disabling nimnom per site
 
-- On the new tab page, register domains (subdomains included) where vios should stay out of the way; all keybindings are ignored there
+- On the new tab page, register domains (subdomains included) where nimnom should stay out of the way; all keybindings are ignored there
 
 ## Installation
 

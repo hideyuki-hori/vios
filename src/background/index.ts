@@ -7,7 +7,7 @@ import { startDevReload } from './dev-reload'
 import { searchHistory } from './history.gateway'
 import { activateTab, closeTab, createTab, listTabs } from './tabs.gateway'
 
-const extensionName = 'vios'
+const extensionName = 'nimnom'
 
 type BackgroundRequest = TabRequest | BookmarkRequest | HistoryRequest
 

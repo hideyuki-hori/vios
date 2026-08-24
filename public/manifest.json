@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "vios",
+  "name": "nimnom",
   "version": "0.1.0",
   "description": "Vim-like keyboard navigation and utilities",
   "permissions": ["tabs", "bookmarks", "history", "storage", "alarms", "declarativeNetRequest"],

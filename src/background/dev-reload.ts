@@ -18,7 +18,7 @@ async function reloadActiveTab(): Promise<void> {
 }
 
 export async function startDevReload(): Promise<void> {
-  console.log('[vios] dev reload enabled')
+  console.log('[nimnom] dev reload enabled')
   if ((await fetchText('/pending-tab-reload')) === 'yes') {
     await reloadActiveTab()
   }
