@@ -1,0 +1,60 @@
+.note {
+  position: fixed;
+  min-width: 140px;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  resize: both;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: #1e2026;
+  color: #e8e8ea;
+  border: 1px solid #383b44;
+  border-radius: 10px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+  font:
+    13px / 1.45 system-ui,
+    sans-serif;
+  z-index: 2147483646;
+}
+
+.note.focused {
+  z-index: 2147483647;
+  border-color: #4f78d1;
+}
+
+.note.pending {
+  border-color: #d14f4f;
+}
+
+.grip {
+  height: 14px;
+  cursor: grab;
+  border-radius: 10px 10px 0 0;
+  background: #2a2d35;
+}
+
+.grip:active {
+  cursor: grabbing;
+}
+
+.memo {
+  display: block;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  padding: 7px 10px;
+  background: transparent;
+  color: #e8e8ea;
+  border: 0;
+  border-radius: 0 0 10px 10px;
+  font: inherit;
+  outline: none;
+  resize: none;
+  overflow-y: auto;
+}
+
+.memo::placeholder {
+  color: #6b7078;
+}

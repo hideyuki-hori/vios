@@ -1,6 +1,7 @@
 import { openBookmarkPalette } from './bookmarks.view'
 import { openHints } from './hint.view'
 import type { Action } from './keybinds.core'
+import { toggleMemo } from './memo.view'
 import { openOmnibar } from './omnibar.view'
 import { createScroller } from './scroll.driver'
 import { openTabSwitcher } from './tab-switcher.view'
@@ -60,6 +61,9 @@ const performers: Record<Action, (repeat: boolean) => void> = {
   },
   openBookmarks() {
     void openBookmarkPalette()
+  },
+  toggleMemo() {
+    toggleMemo()
   },
 }
 

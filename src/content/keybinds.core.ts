@@ -16,6 +16,7 @@ export type Action =
   | 'reloadPage'
   | 'enterHintMode'
   | 'openBookmarks'
+  | 'toggleMemo'
 
 export type Keybind = {
   sequence: Key[]
@@ -38,6 +39,7 @@ export const defaultKeybinds: Keybind[] = [
   { sequence: [key('r')], action: 'reloadPage' },
   { sequence: [key('f')], action: 'enterHintMode' },
   { sequence: [key('b')], action: 'openBookmarks' },
+  { sequence: [key('m')], action: 'toggleMemo' },
 ]
 
 export type MatchResult = { type: 'match'; action: Action } | { type: 'pending' } | { type: 'none' }

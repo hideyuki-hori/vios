@@ -3,6 +3,7 @@ import { handleBookmarkKeydown, isBookmarkPaletteOpen } from './bookmarks.view'
 import { handleHintKeydown, isHintModeActive } from './hint.view'
 import { createKeybindMatcher, defaultKeybinds, releasableActions } from './keybinds.core'
 import { shouldIgnore, toKey } from './keys.to-key'
+import { handleMemoKeydown, isMemoOpen } from './memo.view'
 import { handleOmnibarKeydown, isOmnibarOpen } from './omnibar.view'
 import { handleTabSwitcherKeydown, isTabSwitcherOpen } from './tab-switcher.view'
 
@@ -37,6 +38,7 @@ window.addEventListener(
       handleHintKeydown(event)
       return
     }
+    if (isMemoOpen() && handleMemoKeydown(event)) return
     if (shouldIgnore(event)) return
     clearPendingTimer()
     if (event.key === 'Escape') {
