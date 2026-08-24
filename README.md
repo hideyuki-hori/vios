@@ -26,6 +26,7 @@ If you want a meaning, *nim* is from *nimble*, and *nom* is the sound of somethi
 | `T` | Open the tab switcher |
 | `o` | Open the omnibar (tabs / bookmarks / history / URL / search) |
 | `b` | Open the bookmark palette |
+| `m` | Toggle sticky memos |
 | `x` | Close the current tab |
 | `Esc` | Dismiss modals and hints |
 
@@ -50,6 +51,14 @@ Keybindings are disabled while an input, textarea, or contenteditable element is
 - Lists all bookmarks in tree order
 - `/` to search (matches title, URL, and folder path)
 - `Enter` opens in the current tab, `Shift+Enter` opens in a new tab
+
+### Sticky memos (`m`)
+
+- `m` shows or hides your sticky memos; they are global, so the same memos appear on every page
+- Each memo is a floating note: drag the top bar to move it, drag the bottom-right corner to resize it
+- Inside a memo: `Ctrl+n` adds a new memo, `Ctrl+j` / `Ctrl+k` move focus between memos, `Ctrl+d` deletes the focused memo (press twice if it has text), `Esc` hides all memos
+- Memos, positions, and sizes are saved in `chrome.storage.local`; empty memos are dropped when hidden
+- Edits made in one tab show up in the others
 
 ### Site blocking
 
