@@ -29,6 +29,16 @@
 <p id="error" class="error"></p>
 <ul id="list" class="domain-list"></ul>
 </section>
+<section>
+<h2>vios を無効にするサイト</h2>
+<p class="hint">登録したホスト(サブドメインを含む)ではキーバインドが一切効かなくなります。<code>localhost:5173</code> のようにポートを付けるとポートまで一致させます</p>
+<div class="add-row">
+<input id="disable-input" type="text" placeholder="mail.google.com" autocomplete="off" aria-label="無効にするホスト">
+<button id="disable-add" type="button">追加</button>
+</div>
+<p id="disable-error" class="error"></p>
+<ul id="disable-list" class="domain-list"></ul>
+</section>
 </main>
 <script src="content.js"></script>
 <script src="newtab.js"></script>

@@ -50,6 +50,10 @@ Keybindings are disabled while an input, textarea, or contenteditable element is
 - On a blocked page, type `unlock <domain>` by hand (paste is disabled) to unlock for one hour
 - When the hour expires, the domain is blocked again and open tabs are redirected to the blocked page
 
+### Disabling vios per site
+
+- On the new tab page, register domains (subdomains included) where vios should stay out of the way; all keybindings are ignored there
+
 ## Installation
 
 ```sh

@@ -1,6 +1,8 @@
 import { addBlockedDomain, normalizeDomain, removeBlockedDomain } from '~/lib/block.core'
 import { findOpenTabs, reblockAlarmPrefix, syncBlockRules } from '~/lib/block.gateway'
 import { loadBlockState, saveBlockState } from '~/lib/block.storage'
+import { addDisabledSite, normalizeSite, removeDisabledSite } from '~/lib/disable.core'
+import { loadDisabledSites, saveDisabledSites } from '~/lib/disable.storage'
 import { byId, inputById } from '~/lib/dom'
 
 const focusedFlag = 'focused'
@@ -12,18 +14,25 @@ if (!new URLSearchParams(location.search).has(focusedFlag)) {
 const inputEl = inputById('input')
 const errorEl = byId('error')
 const listEl = byId('list')
+const disableInputEl = inputById('disable-input')
+const disableErrorEl = byId('disable-error')
+const disableListEl = byId('disable-list')
 
-async function render(): Promise<void> {
-  const state = await loadBlockState()
-  listEl.textContent = ''
-  if (state.domains.length === 0) {
+function renderDomainList(
+  target: HTMLElement,
+  domains: string[],
+  emptyText: string,
+  onRemove: (domain: string) => void,
+): void {
+  target.textContent = ''
+  if (domains.length === 0) {
     const empty = document.createElement('li')
     empty.className = 'empty'
-    empty.textContent = 'ブロック中のサイトはありません'
-    listEl.append(empty)
+    empty.textContent = emptyText
+    target.append(empty)
     return
   }
-  for (const domain of state.domains) {
+  for (const domain of domains) {
     const item = document.createElement('li')
     const name = document.createElement('span')
     name.textContent = domain
@@ -31,11 +40,47 @@ async function render(): Promise<void> {
     remove.type = 'button'
     remove.textContent = '削除'
     remove.addEventListener('click', () => {
-      void removeDomain(domain)
+      onRemove(domain)
     })
     item.append(name, remove)
-    listEl.append(item)
+    target.append(item)
   }
+}
+
+async function render(): Promise<void> {
+  const state = await loadBlockState()
+  renderDomainList(listEl, state.domains, 'ブロック中のサイトはありません', (domain) => {
+    void removeDomain(domain)
+  })
+}
+
+async function renderDisabled(): Promise<void> {
+  const domains = await loadDisabledSites()
+  renderDomainList(disableListEl, domains, '無効にしているサイトはありません', (domain) => {
+    void removeDisabled(domain)
+  })
+}
+
+async function removeDisabled(domain: string): Promise<void> {
+  await saveDisabledSites(removeDisabledSite(await loadDisabledSites(), domain))
+  await renderDisabled()
+}
+
+async function addDisabled(raw: string): Promise<void> {
+  disableErrorEl.textContent = ''
+  const domain = normalizeSite(raw)
+  if (domain === null) {
+    disableErrorEl.textContent = 'ホストとして解釈できません'
+    return
+  }
+  const domains = await loadDisabledSites()
+  if (domains.includes(domain)) {
+    disableErrorEl.textContent = 'すでに登録されています'
+    return
+  }
+  await saveDisabledSites(addDisabledSite(domains, domain))
+  disableInputEl.value = ''
+  await renderDisabled()
 }
 
 async function removeDomain(domain: string): Promise<void> {
@@ -127,4 +172,14 @@ inputEl.addEventListener('keydown', (event) => {
   void addDomain(inputEl.value)
 })
 
+byId('disable-add').addEventListener('click', () => {
+  void addDisabled(disableInputEl.value)
+})
+
+disableInputEl.addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter' || event.isComposing) return
+  void addDisabled(disableInputEl.value)
+})
+
 void render()
+void renderDisabled()

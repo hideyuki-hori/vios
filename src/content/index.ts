@@ -1,3 +1,5 @@
+import { isDisabledOn } from '~/lib/disable.core'
+import { loadDisabledSites, subscribeDisabledSites } from '~/lib/disable.storage'
 import { performAction, releaseAction } from './actions'
 import { handleBookmarkKeydown, isBookmarkPaletteOpen } from './bookmarks.view'
 import { handleHintKeydown, isHintModeActive } from './hint.view'
@@ -11,6 +13,15 @@ const sequenceTimeoutMs = 1000
 
 const matcher = createKeybindMatcher(defaultKeybinds)
 let pendingTimer: number | undefined
+let disabled = false
+
+function applyDisabledSites(domains: string[]): void {
+  disabled = isDisabledOn(location.host, domains)
+  if (disabled) matcher.reset()
+}
+
+void loadDisabledSites().then(applyDisabledSites)
+subscribeDisabledSites(applyDisabledSites)
 
 function clearPendingTimer(): void {
   if (pendingTimer !== undefined) {
@@ -22,6 +33,7 @@ function clearPendingTimer(): void {
 window.addEventListener(
   'keydown',
   (event) => {
+    if (disabled) return
     if (isOmnibarOpen()) {
       handleOmnibarKeydown(event)
       return
@@ -64,6 +76,7 @@ window.addEventListener(
 window.addEventListener(
   'keyup',
   (event) => {
+    if (disabled) return
     for (const action of releasableActions(defaultKeybinds, event.key)) {
       releaseAction(action)
     }
